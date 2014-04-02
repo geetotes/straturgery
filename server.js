@@ -33,9 +33,21 @@ function drawWelcome(){
   welcome += "             STRATURGERY\n";
   welcome += "-----------------------------------------\n";
   welcome += "\x1B[39m";
-  welcome += "\x1B[3m\x1B[37m         The Game of Pulling Out\x1B[39m\x1B[23m";
+  welcome += "\x1B[3m\x1B[37m         The Game of Pulling Out\x1B[39m\x1B[23m\n";
 
   return welcome;
+}
+
+//this will eventually take some type of decision menu object that will help out with highlighting
+function drawDecisionMenu(){
+  var decisionMenu = "";
+  decisionMenu += "1. Intelligence policy\n";
+  decisionMenu += "2. Policing policy\n";
+  decisionMenu += "3. Military policy\n";
+  decisionMenu += "4. Iran policy\n";
+
+  return decisionMenu;
+
 }
 
 function recieveData(socket, data, turn) {
@@ -73,8 +85,9 @@ function closeSocket(socket) {
 function newSocket(socket) {
   var turn = 0;
   sockets.push(socket);
-  socket.write(drawWelcome() + '\n');
+  socket.write(drawWelcome());
   socket.on('data', function(data) {
+    socket.write(drawDecisionMenu());
     recieveData(socket, data, turn);
     //should prob not increment every time input goes in
     turn += 1;
