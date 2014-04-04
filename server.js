@@ -72,7 +72,8 @@ function centerText(cols, symbol, text) {
 
 //turn is an int
 //time should go from a start date
-function incrementTime(turn) {
+//TODO: Put this into some type of object representing the game state
+function getCurrentDate(turn) {
   //months are zero based
   startDate = new Date(2007, 0, 1);
   //eventually, we will use the endDate condition to determine the end of the game
@@ -100,11 +101,54 @@ function drawWelcome(){
   return welcome;
 }
 
-function drawNewsRoom(){
+//TODO: Refactor this please
+function fetchHeadlines(currentDate) {
+  var fs = require('fs');
+  var file = __dirname + '/headlines.json';
+  var headlines = [];
+
+  fs.readFile(file, 'utf8', function(err, data) {
+    if(err) {
+      console.log('Error: ' + err);
+      return;
+    }
+
+    data = JSON.parse(data);
+
+    //pop 3 random headlines from data[currentDate]
+
+    var lookup = currentDate.getFullYear() + "-" + currentDate.getMonth();
+    if(data[lookup] === undefined) {
+      headlines.push("No headlines available for this month");
+      console.log('No headlines available for: ' + currentDate.getFullYear() + "-" + currentDate.getMonth());
+    } else {
+      //grab 3 random headlines
+      var minimum = 0;
+      var dataHeadlines = data[lookup];
+      //console.log(dataHeadlines);
+      var maximum = dataHeadlines.length - 1;
+      for(var i = 0; i < 3; i++) {
+        var randomnumber = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+        headlines.push(dataHeadlines[randomnumber]);
+        console.log(headlines);
+        //console.log(dataHeadlines[randomnumber]);
+      }
+    }
+  });
+  console.log ("returning headlines: " + headlines.length);
+  return headlines;
+}
+
+function drawNewsRoom(currentDate){
   var newsRoom = "";
   var colorer = new Color();
+  var headlines = fetchHeadlines(currentDate);
   newsRoom += colorer.headline("TODAYS HEADLINES") + "\n";
   newsRoom += drawBreak(80, "-");
+  console.log(headlines.length);
+  headlines.forEach(function(item) {
+    newsRoom += item + "\n";
+  });
   newsRoom += "WASHINGTON DC: Aliens elected president\n";
   newsRoom += "NEW YORK CITY: Bloomberg re-elected\n";
 
@@ -126,10 +170,8 @@ function drawDecisionMenu(){
 function recieveData(socket, data, turn) {
   //increment time
   //output time
-  var currentDate = incrementTime(turn);
+  var currentDate = getCurrentDate(turn);
   socket.write("Today's Date: [" + currentDate.getMonthName() + " " + currentDate.getFullYear() +"]\n".zebra);
-
-
 
   //need to find a better way to catch the quit command
   var cleanData = cleanInput(data);
@@ -161,7 +203,9 @@ function newSocket(socket) {
   socket.write(drawWelcome());
   //should figure out to start a new game or continue an old one somewhere here
   socket.on('data', function(data) {
-    socket.write(drawNewsRoom());
+    //remove below when game state object is built
+    var currentDate = getCurrentDate(turn);
+    socket.write(drawNewsRoom(currentDate));
     socket.write(drawDecisionMenu());
     recieveData(socket, data, turn);
     //should prob not increment every time input goes in
