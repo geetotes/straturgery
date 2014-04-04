@@ -23,12 +23,12 @@ Color.prototype.redBG = function(text) {
 };
 
 Color.prototype.greenOnWhite = function(text) {
-  var wrappedText = "\x1B[47m\x1B[32m" + text + "x1B[0m";
+  var wrappedText = "\x1B[47m\x1B[32m" + text + "\x1B[0m";
   return wrappedText;
 };
 
 Color.prototype.blackBG = function(text) {
-  var wrappedText = "\x1B[40m\x1B[32m" + text + "x1B[0m";
+  var wrappedText = "\x1B[40m\x1B[32m" + text + "\x1B[0m";
   return wrappedText;
 };
 
@@ -38,15 +38,17 @@ function drawIraqFlag(cols, barHeight) {
   var colorer = new Color();
 
   for(var i = 1; i < cols; i++) {
-    redBar += "";
-    greenBar += "";
-    blackBar += "";
-  }
-  if (barHeight < 2) {
-    greenBar = colorer.greenOnWhite(centerText(cols, " ", "* * *"));
+    redBar += " ";
+    greenBar += " ";
+    blackBar += " ";
   }
 
-  var finalFlag = colorer.redBG(redBar) + greenBar + colorer.blackBG(blackBar);
+  redBar = colorer.redBG(redBar) + "\n" + colorer.redBG(redBar) + "\n" + colorer.redBG(redBar) + "\n";
+  greenBar = colorer.greenOnWhite(greenBar) + "\n" + colorer.greenOnWhite(centerText(cols, " ", "* * *")) + "\n" + colorer.greenOnWhite(greenBar) + "\n";
+  blackBar = colorer.blackBG(blackBar) + "\n" + colorer.blackBG(blackBar) + "\n" + colorer.blackBG(blackBar) + "\n";
+
+  var finalFlag = redBar + greenBar + blackBar;
+  return finalFlag;
 }
 
 
@@ -92,6 +94,7 @@ function drawWelcome(){
   welcome += drawBreak(80, "-");
   welcome += "\x1B[39m";
   welcome += centerText(80, " ", "The Game of Pulling Out");
+  welcome += drawIraqFlag(40, 2);
   //welcome += "\x1B[3m\x1B[37m\x1B[39m\x1B[23m\n";
 
   return welcome;
