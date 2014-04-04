@@ -168,22 +168,10 @@ function drawNewsRoom(currentDate){
   newsRoom += colorer.headline("TODAYS HEADLINES") + "\n";
   newsRoom += drawBreak(80, "-");
   var headlines = fetchHeadlines();
-  /*
-  fetchHeadlines(function (err, content) {
-    console.log(headlines);
-    content = JSON.parse(content);
-    headlines = content['2007-1'];
-
-    console.log(headlines);
-    return headlines;
-    /*
-    headlines.forEach(function(headline) {
-      newsRoom += headline + "\n";
-      console.log(headline);
-    });
-    */
-  //});
-  console.log("down below " + headlines);
+  headlines.forEach(function(headline) {
+    newsRoom += headline + "\n";
+    console.log(headline);
+  });
 
 
   newsRoom += "WASHINGTON DC: Aliens elected president\n";
