@@ -7,13 +7,6 @@ var gameState = require('./gameState');
 var ui = require('./ui');
 
 function drawIraqFlag(cols, barHeight) {
-  var redBar = "", greenBar = "", blackBar = "";
-
-  for(var i = 1; i < cols; i++) {
-    redBar += " ";
-    greenBar += " ";
-    blackBar += " ";
-  }
 
   redBar = ui.redBG(redBar) + "\n" + ui.redBG(redBar) + "\n" + ui.redBG(redBar) + "\n";
   greenBar = ui.greenOnWhite(greenBar) + "\n" + ui.greenOnWhite(centerText(cols, " ", "* * *")) + "\n" + ui.greenOnWhite(greenBar) + "\n";
@@ -24,38 +17,21 @@ function drawIraqFlag(cols, barHeight) {
 }
 
 
-//UI HELPER METHODS GO HERE
-function drawBreak(cols, symbol) {
-  var breaker = "";
-  for(var i = 1; i < cols; i++) {
-    breaker += symbol;
-  }
-  return breaker += "\n";
-}
-
-function centerText(cols, symbol, text) {
-  var padding = "";
-  var upperLimit = Math.round((cols - text.length)/2);
-  for(var i = 1; i < upperLimit; i++) {
-    padding += symbol;
-  }
-  return padding += text + "\n";
-}
 
 function cleanInput(data) {
   return data.toString().replace(/(\r\n|\n|\r)/gm,"");
 }
 
 function drawWelcome(){
+  //remove these codes
   var welcome = "\x1B[31m";
-  welcome += drawBreak(80, "-");
-  welcome += centerText(80, " ", "Welcome to");
-  welcome += centerText(80, " ", "STRATURGERY");
-  welcome += drawBreak(80, "-");
+  welcome += ui.drawBreak(80, "-");
+  welcome += ui.centerText(80, " ", "Welcome to");
+  welcome += ui.centerText(80, " ", "STRATURGERY");
+  welcome += ui.drawBreak(80, "-");
   welcome += "\x1B[39m";
-  welcome += centerText(80, " ", "The Game of Pulling Out");
-  welcome += drawIraqFlag(40, 2);
-  //welcome += "\x1B[3m\x1B[37m\x1B[39m\x1B[23m\n";
+  welcome += ui.centerText(80, " ", "The Game of Pulling Out");
+  welcome += ui.drawIraqiFlag(40, 3);
 
   return welcome;
 }
@@ -123,7 +99,7 @@ function drawNewsRoom(){
   //taking out the headline selection for now
   //var headlines = fetchHeadlines(currentDate);
   newsRoom += ui.headline("TODAYS HEADLINES") + "\n";
-  newsRoom += drawBreak(80, "-");
+  newsRoom += ui.drawBreak(80, "-");
   var headlines = fetchHeadlines();
   headlines.forEach(function(headline) {
     newsRoom += headline + "\n";
