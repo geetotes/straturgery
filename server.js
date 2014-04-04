@@ -9,6 +9,65 @@ Date.prototype.getMonthName = function() {
   return months[this.getMonth()];
 };
 
+//TODO: Refactor all this stuff into a UI helper class
+
+function Color() {}
+Color.prototype.headline = function(text) {
+  var wrappedText = "\x1B[0m\x1B[42m\x1B[37m" + text + "\x1B[0m";
+  return wrappedText; 
+};
+
+Color.prototype.redBG = function(text) {
+  var wrappedText = "\x1B[41m" + text + "\x1B[0m";
+  return wrappedText;
+};
+
+Color.prototype.greenOnWhite = function(text) {
+  var wrappedText = "\x1B[47m\x1B[32m" + text + "x1B[0m";
+  return wrappedText;
+};
+
+Color.prototype.blackBG = function(text) {
+  var wrappedText = "\x1B[40m\x1B[32m" + text + "x1B[0m";
+  return wrappedText;
+};
+
+
+function drawIraqFlag(cols, barHeight) {
+  var redBar = "", greenBar = "", blackBar = "";
+  var colorer = new Color();
+
+  for(var i = 1; i < cols; i++) {
+    redBar += "";
+    greenBar += "";
+    blackBar += "";
+  }
+  if (barHeight < 2) {
+    greenBar = colorer.greenOnWhite(centerText(cols, " ", "* * *"));
+  }
+
+  var finalFlag = colorer.redBG(redBar) + greenBar + colorer.blackBG(blackBar);
+}
+
+
+//UI HELPER METHODS GO HERE
+function drawBreak(cols, symbol) {
+  var breaker = "";
+  for(var i = 1; i < cols; i++) {
+    breaker += symbol;
+  }
+  return breaker += "\n";
+}
+
+function centerText(cols, symbol, text) {
+  var padding = "";
+  var upperLimit = Math.round((cols - text.length)/2);
+  for(var i = 1; i < upperLimit; i++) {
+    padding += symbol;
+  }
+  return padding += text + "\n";
+}
+
 //turn is an int
 //time should go from a start date
 function incrementTime(turn) {
@@ -20,13 +79,6 @@ function incrementTime(turn) {
   return currentDate;
 }
 
-function drawBreak(cols, symbol) {
-  var breaker = "";
-  for(var i = 1; i < cols; i++) {
-    breaker += symbol;
-  }
-  return breaker += "\n";
-}
 
 function cleanInput(data) {
   return data.toString().replace(/(\r\n|\n|\r)/gm,"");
@@ -35,18 +87,20 @@ function cleanInput(data) {
 function drawWelcome(){
   var welcome = "\x1B[31m";
   welcome += drawBreak(80, "-");
-  welcome += "             Welcome to\n";
-  welcome += "             STRATURGERY\n";
+  welcome += centerText(80, " ", "Welcome to");
+  welcome += centerText(80, " ", "STRATURGERY");
   welcome += drawBreak(80, "-");
   welcome += "\x1B[39m";
-  welcome += "\x1B[3m\x1B[37m         The Game of Pulling Out\x1B[39m\x1B[23m\n";
+  welcome += centerText(80, " ", "The Game of Pulling Out");
+  //welcome += "\x1B[3m\x1B[37m\x1B[39m\x1B[23m\n";
 
   return welcome;
 }
 
 function drawNewsRoom(){
   var newsRoom = "";
-  newsRoom += "TODAYS HEADLINES\n";
+  var colorer = new Color();
+  newsRoom += colorer.headline("TODAYS HEADLINES") + "\n";
   newsRoom += drawBreak(80, "-");
   newsRoom += "WASHINGTON DC: Aliens elected president\n";
   newsRoom += "NEW YORK CITY: Bloomberg re-elected\n";
