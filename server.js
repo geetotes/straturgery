@@ -102,21 +102,18 @@ function drawWelcome(){
 }
 
 //TODO: Refactor this please
-function fetchHeadlines(currentDate) {
+function oldFetchHeadlines(currentDate) {
   var fs = require('fs');
   var file = __dirname + '/headlines.json';
-  var headlines = [];
+  var data;
 
   fs.readFile(file, 'utf8', function(err, data) {
     if(err) {
       console.log('Error: ' + err);
       return;
     }
-
     data = JSON.parse(data);
-
     //pop 3 random headlines from data[currentDate]
-
     var lookup = currentDate.getFullYear() + "-" + currentDate.getMonth();
     if(data[lookup] === undefined) {
       headlines.push("No headlines available for this month");
@@ -125,13 +122,12 @@ function fetchHeadlines(currentDate) {
       //grab 3 random headlines
       var minimum = 0;
       var dataHeadlines = data[lookup];
-      //console.log(dataHeadlines);
       var maximum = dataHeadlines.length - 1;
-      for(var i = 0; i < 3; i++) {
+      for(var i = 0; i < 1; i++) {
         var randomnumber = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
         headlines.push(dataHeadlines[randomnumber]);
-        console.log(headlines);
-        //console.log(dataHeadlines[randomnumber]);
+        console.log("in loop: " + headlines);
+        return headlines;
       }
     }
   });
@@ -139,16 +135,57 @@ function fetchHeadlines(currentDate) {
   return headlines;
 }
 
+//orig looking at
+//from SO: http://stackoverflow.com/questions/10058814/get-data-from-fs-readfile
+//but then decided that async didn't really work here, since i need to return the headlines so far up the call stack
+//now looking at: http://stackoverflow.com/questions/10011011/using-node-js-how-do-i-read-a-json-object-into-server-memory
+//SO links for future refrence
+function fetchHeadlines() {
+  var fs = require('fs');
+  var file = __dirname + '/headlines.json';
+  var data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  var headlines;
+  /*
+  fs.readFile(file, 'utf8', function(err, data) {
+    if(err) {
+      console.log('Error: ' + err);
+      return callback(err);
+    }
+    callback(null, data);
+  });
+  */
+  headlines = data['2007-1'];
+  console.log("down below: " + headlines);
+  return headlines;
+}
+
+
 function drawNewsRoom(currentDate){
   var newsRoom = "";
   var colorer = new Color();
-  var headlines = fetchHeadlines(currentDate);
+  //taking out the headline selection for now
+  //var headlines = fetchHeadlines(currentDate);
   newsRoom += colorer.headline("TODAYS HEADLINES") + "\n";
   newsRoom += drawBreak(80, "-");
-  console.log(headlines.length);
-  headlines.forEach(function(item) {
-    newsRoom += item + "\n";
-  });
+  var headlines = fetchHeadlines();
+  /*
+  fetchHeadlines(function (err, content) {
+    console.log(headlines);
+    content = JSON.parse(content);
+    headlines = content['2007-1'];
+
+    console.log(headlines);
+    return headlines;
+    /*
+    headlines.forEach(function(headline) {
+      newsRoom += headline + "\n";
+      console.log(headline);
+    });
+    */
+  //});
+  console.log("down below " + headlines);
+
+
   newsRoom += "WASHINGTON DC: Aliens elected president\n";
   newsRoom += "NEW YORK CITY: Bloomberg re-elected\n";
 
