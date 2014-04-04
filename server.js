@@ -4,35 +4,10 @@ var net = require('net');
 var sockets = [];
 
 var gameState = require('./gameState');
-//var ui = require('UI');
-
-//TODO: Refactor all this stuff into a UI helper class
-
-function Color() {}
-Color.prototype.headline = function(text) {
-  var wrappedText = "\x1B[0m\x1B[42m\x1B[37m" + text + "\x1B[0m";
-  return wrappedText; 
-};
-
-Color.prototype.redBG = function(text) {
-  var wrappedText = "\x1B[41m" + text + "\x1B[0m";
-  return wrappedText;
-};
-
-Color.prototype.greenOnWhite = function(text) {
-  var wrappedText = "\x1B[47m\x1B[32m" + text + "\x1B[0m";
-  return wrappedText;
-};
-
-Color.prototype.blackBG = function(text) {
-  var wrappedText = "\x1B[40m\x1B[32m" + text + "\x1B[0m";
-  return wrappedText;
-};
-
+var ui = require('./ui');
 
 function drawIraqFlag(cols, barHeight) {
   var redBar = "", greenBar = "", blackBar = "";
-  var colorer = new Color();
 
   for(var i = 1; i < cols; i++) {
     redBar += " ";
@@ -40,9 +15,9 @@ function drawIraqFlag(cols, barHeight) {
     blackBar += " ";
   }
 
-  redBar = colorer.redBG(redBar) + "\n" + colorer.redBG(redBar) + "\n" + colorer.redBG(redBar) + "\n";
-  greenBar = colorer.greenOnWhite(greenBar) + "\n" + colorer.greenOnWhite(centerText(cols, " ", "* * *")) + "\n" + colorer.greenOnWhite(greenBar) + "\n";
-  blackBar = colorer.blackBG(blackBar) + "\n" + colorer.blackBG(blackBar) + "\n" + colorer.blackBG(blackBar) + "\n";
+  redBar = ui.redBG(redBar) + "\n" + ui.redBG(redBar) + "\n" + ui.redBG(redBar) + "\n";
+  greenBar = ui.greenOnWhite(greenBar) + "\n" + ui.greenOnWhite(centerText(cols, " ", "* * *")) + "\n" + ui.greenOnWhite(greenBar) + "\n";
+  blackBar = ui.blackBG(blackBar) + "\n" + ui.blackBG(blackBar) + "\n" + ui.blackBG(blackBar) + "\n";
 
   var finalFlag = redBar + greenBar + blackBar;
   return finalFlag;
@@ -145,10 +120,9 @@ function fetchHeadlines() {
 
 function drawNewsRoom(){
   var newsRoom = "";
-  var colorer = new Color();
   //taking out the headline selection for now
   //var headlines = fetchHeadlines(currentDate);
-  newsRoom += colorer.headline("TODAYS HEADLINES") + "\n";
+  newsRoom += ui.headline("TODAYS HEADLINES") + "\n";
   newsRoom += drawBreak(80, "-");
   var headlines = fetchHeadlines();
   headlines.forEach(function(headline) {
