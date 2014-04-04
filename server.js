@@ -1,13 +1,10 @@
 /*jslint node: true, sloppy: true, white: true, vars: true */
 
 var net = require('net');
-var colors = require('colors');
 var sockets = [];
 
-Date.prototype.getMonthName = function() {
-  var months = ["January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  return months[this.getMonth()];
-};
+var gameState = require('./gameState');
+//var ui = require('UI');
 
 //TODO: Refactor all this stuff into a UI helper class
 
@@ -69,19 +66,6 @@ function centerText(cols, symbol, text) {
   }
   return padding += text + "\n";
 }
-
-//turn is an int
-//time should go from a start date
-//TODO: Put this into some type of object representing the game state
-function getCurrentDate(turn) {
-  //months are zero based
-  startDate = new Date(2007, 0, 1);
-  //eventually, we will use the endDate condition to determine the end of the game
-  endDate = new Date(2011, 0, 1);
-  currentDate = new Date(startDate.getFullYear(), turn, startDate.getDate());
-  return currentDate;
-}
-
 
 function cleanInput(data) {
   return data.toString().replace(/(\r\n|\n|\r)/gm,"");
@@ -155,12 +139,11 @@ function fetchHeadlines() {
   });
   */
   headlines = data['2007-1'];
-  console.log("down below: " + headlines);
   return headlines;
 }
 
 
-function drawNewsRoom(currentDate){
+function drawNewsRoom(){
   var newsRoom = "";
   var colorer = new Color();
   //taking out the headline selection for now
@@ -195,8 +178,8 @@ function drawDecisionMenu(){
 function recieveData(socket, data, turn) {
   //increment time
   //output time
-  var currentDate = getCurrentDate(turn);
-  socket.write("Today's Date: [" + currentDate.getMonthName() + " " + currentDate.getFullYear() +"]\n".zebra);
+  var currentDate = gameState.getCurrentDate().toFormattedString();
+  socket.write(currentDate +" \n");
 
   //need to find a better way to catch the quit command
   var cleanData = cleanInput(data);
@@ -228,9 +211,8 @@ function newSocket(socket) {
   socket.write(drawWelcome());
   //should figure out to start a new game or continue an old one somewhere here
   socket.on('data', function(data) {
-    //remove below when game state object is built
-    var currentDate = getCurrentDate(turn);
-    socket.write(drawNewsRoom(currentDate));
+    gameState.setTurn(turn);
+    socket.write(drawNewsRoom());
     socket.write(drawDecisionMenu());
     recieveData(socket, data, turn);
     //should prob not increment every time input goes in
