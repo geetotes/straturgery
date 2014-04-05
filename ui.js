@@ -44,11 +44,10 @@ UI.prototype.centerText = function(cols, symbol, text) {
 UI.prototype.drawIraqiFlag = function(cols, barHeight) {
   var redBar = "", greenBar = "", blackBar = "", starsBar = "";
   var redBarFinal = "", blackBarFinal = "", greenBarFinal = "";
+  var spacer = "";
 
   var starsBar2 = this.centerText(cols, " ", "* * *");
-  console.log(starsBar);
   starsBar = starsBar2.replace(/\n|\r/g, "");
-  console.log(starsBar);
 
   for(var i = 1; i < cols; i++) {
     redBar += " ";
@@ -56,18 +55,23 @@ UI.prototype.drawIraqiFlag = function(cols, barHeight) {
     blackBar += " ";
   }
 
+  //assume 80 col width here
+  for(i = 0; i < ((80-cols)/2); i++) {
+    spacer += " ";
+  }
+
   for(i = 0; i< barHeight; i++) {
-    redBarFinal += this.redBG(redBar) + "\n"; 
-    blackBarFinal += this.blackBG(blackBar) + "\n"; 
+    redBarFinal += spacer + this.redBG(redBar) + "\n"; 
+    blackBarFinal += spacer + this.blackBG(blackBar) + "\n"; 
     if(barHeight % i === 0) {
       //don't forget to fill in
-      var spacer = "";
+      var barsSpacer = "";
       var remainingLength = cols  - starsBar.length;
       for(var j = 1; j < remainingLength; j++)
-        spacer += " ";
-      greenBarFinal += this.greenOnWhite(starsBar + spacer) + "\n";
+        barsSpacer += " ";
+      greenBarFinal += spacer + this.greenOnWhite(starsBar + barsSpacer) + "\n";
     } else {
-      greenBarFinal += this.greenOnWhite(greenBar) + "\n";
+      greenBarFinal += spacer + this.greenOnWhite(greenBar) + "\n";
     }
   }
 

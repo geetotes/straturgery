@@ -30,8 +30,8 @@ function drawWelcome(){
   welcome += ui.centerText(80, " ", "STRATURGERY");
   welcome += ui.drawBreak(80, "-");
   welcome += "\x1B[39m";
+  welcome += ui.drawIraqiFlag(30, 3);
   welcome += ui.centerText(80, " ", "The Game of Pulling Out");
-  welcome += ui.drawIraqiFlag(40, 3);
 
   return welcome;
 }
