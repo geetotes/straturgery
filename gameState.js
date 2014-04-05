@@ -7,7 +7,7 @@ Date.prototype.getMonthName = function() {
 };
 
 Date.prototype.toFormattedString = function() {
-  return "Today's Date: [" + currentDate.getMonthName() + " " + currentDate.getFullYear() + "]";
+  return "[" + currentDate.getMonthName() + " " + currentDate.getFullYear() + "]";
 };
 
 
@@ -20,6 +20,10 @@ function setCurrentDate(turn) {
   endDate = new Date(2011, 0, 1);
   currentDate = new Date(startDate.getFullYear(), turn, startDate.getDate());
 }
+
+exports.getHeadlineDate = function() {
+  return currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1);
+};
 
 exports.getCurrentDate = function() {
   return currentDate;

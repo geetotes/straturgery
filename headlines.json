@@ -1,4 +1,14 @@
 {
-  "2007-1": ["Hillary Clinton Forms Presidential Exploratory Committee", "Home of Stonehenge Builders Found", "87% Believe Bush Should be Impeached"],
-  "2007-2": ["Al Franken to run for US Senate", "Smoking in Public Places Banned in France", "Colts win Super Bowl", "Anna Nicole Smith Dies", "Reconniassance Orbiter Finds More Evidence of Water on the Planet Mars"]
+  "2007-1": [
+    "NEW YORK: Hillary Clinton Forms Presidential Exploratory Committee", 
+    "Home of Stonehenge Builders Found", 
+    "87% Believe Bush Should be Impeached",
+    "CACARAS: Chavez Moves Towards Greater Control"
+      ],
+  "2007-2": [
+    "MINNEAPOLIS: Al Franken to run for US Senate", 
+    "PARIS: Smoking in Public Places Banned in France", 
+    "Colts win Super Bowl", 
+    "Anna Nicole Smith Dies", 
+    "Reconniassance Orbiter Finds More Evidence of Water on the Planet Mars"]
 }
