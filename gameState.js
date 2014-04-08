@@ -11,7 +11,7 @@ Date.prototype.toFormattedString = function() {
 };
 
 
-var currentDate;
+var currentDate, currentPosition, gameMap, coords = {};
 
 function setCurrentDate(turn) {
   //months are zero based
@@ -20,6 +20,63 @@ function setCurrentDate(turn) {
   endDate = new Date(2011, 0, 1);
   currentDate = new Date(startDate.getFullYear(), turn, startDate.getDate());
 }
+
+/* Game Map
+0 1 2
+Home Screen, Intel 1, Intel 2
+*/
+
+//this will eventually be part of a gameMap object
+function wordList() {
+  var wordMap = {};
+  if(coords.x === 0 && coords.y === 0) {
+    wordMap = {
+      intelligence:{ x: 0, y: 1},
+      policing:{ x: 1, y: 0}
+    };
+    return wordMap;
+  }
+}
+
+
+exports.move = function(cleanData) {
+  //should see which coords we are at
+  //then compare to a list of words
+  //then move the coords based on the valid word
+  //TODO: refactor here
+  var validWordList = Object.keys(wordList());
+  var wordMap = wordList();
+  console.log(validWordList);
+  console.log(cleanData);
+  //now make an array of smallest unique starts
+  //match against regex
+  var matches = [], re = new RegExp("^" + cleanData, "gi");
+  validWordList.forEach(function(word) {
+    if(word.match(re) !== null)
+      matches.push(word);
+  });
+  //now we have an array of matches, but if it is bigger then one, we have a double match and need more input
+  if(matches.length > 1) {
+    //umm????
+    return false;
+  }else{
+    coords = wordMap[matches[0]];
+    console.log(coords);
+  }
+    
+
+};
+
+
+exports.getCoords = function() {
+  return coords;
+};
+
+
+exports.setCoords = function(newCoords) {
+  coords = newCoords;
+};
+
 
 exports.getHeadlineDate = function() {
   return currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1);

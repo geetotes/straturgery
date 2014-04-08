@@ -147,9 +147,11 @@ function recieveData(socket, data, turn) {
     socket.end('\x1B[44mGoodbye!\x1B[49m\n');
   }
   else {
+    //should simply update coordinates
+    gameState.move(cleanData);
     for (var i = 0; i<sockets.length; i++){
       if (sockets[i] !== socket) {
-        sockets[i].write(data);
+        //sockets[i].write(data);
       }
       if (sockets[i] == socket) {
         //sockets[i].write("You said: " + data);
@@ -166,15 +168,30 @@ function closeSocket(socket) {
 }
 
 function newSocket(socket) {
-  var turn = 0;
+  //starting variables
+  var turn = 0, coords = {};
+  coords.x = 0;
+  coords.y = 0;
+  //set the initial turn # and position in the "map"
+  gameState.setCoords(coords);
+  gameState.setTurn(turn);
+
   sockets.push(socket);
+
   socket.write(drawWelcome());
   //should figure out to start a new game or continue an old one somewhere here
   socket.on('data', function(data) {
-    gameState.setTurn(turn);
-    socket.write(drawNewsRoom());
-    socket.write(drawDecisionMenu());
-    socket.write(drawHumIntRoom());
+    //socket.write(gameState.getCurrentMenu());
+    var coords = gameState.getCoords();
+    console.log(coords);
+    if(coords.x === 0 && coords.y === 0){
+      socket.write(drawNewsRoom());
+      socket.write(drawDecisionMenu());
+    }
+    if(coords.x === 0 && coords.y === 1)
+      socket.write(drawSigIntRoom());
+    if(coords.x === 0 && coords.y === 2)
+      socket.write(drawHumIntRoom());
     recieveData(socket, data, turn);
     //should prob not increment every time input goes in, fix e.g.:
     //if data = option 5, then:
