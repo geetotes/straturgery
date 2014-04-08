@@ -3,15 +3,16 @@
 //DESIGN NOTE: there should be no newlines or color strings in main function
 
 
+//takes bg and fg as ints
 function UI() {}
-UI.prototype.headlineHeader = function(text, gameState) {
+UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
   var endPadding = "";
   var currentDate = gameState.getCurrentDate();
   console.log(currentDate);
   var textLength = text.length + currentDate.toFormattedString().length;
   for(var i = 0; i < (80 - textLength); i++)
     endPadding += " ";
-  var wrappedText = "\x1B[0m\x1B[42m\x1B[37m" + text + endPadding + currentDate.toFormattedString() + "\x1B[0m";
+  var wrappedText = "\x1B[0m\x1B[" + bg + "m\x1B["+ fg +"m" + text + endPadding + currentDate.toFormattedString() + "\x1B[0m";
   return wrappedText; 
 };
 

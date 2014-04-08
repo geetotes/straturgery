@@ -54,25 +54,42 @@ function fetchHeadlines() {
 
 
 function drawNewsRoom(){
-  var newsRoom = "";
-  newsRoom += ui.headlineHeader("TODAYS HEADLINES", gameState) + "\n";
-  newsRoom += ui.drawBreak(80, "-");
+  var room = "";
+  room += ui.headlineHeader("TODAYS HEADLINES", gameState, 42, 37) + "\n";
+  room += ui.drawBreak(80, "-");
   var headlines = fetchHeadlines().shuffle();
   //let's just show 3 for now
   var i = 0;
   headlines.forEach(function(headline) {
     if(i < 3) {
-      newsRoom += headline + "\n";
+      room += headline + "\n";
       i += 1;
     }
   });
-  newsRoom += ui.drawBreak(80, "-");
-  return newsRoom;
+  room += ui.drawBreak(80, "-");
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  return room;
+}
+
+function drawIntelRoom(){
+  var room = "";
+
+  room += ui.headlineHeader("INTELLIGENCE", gameState, 41, 37) + "\n";
+  room += ui.drawBreak(80, "-");
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(40, "\u00A9");
+  room += "* SIGINT * HUMINT *";
+
+  return room;
 }
 
 //this will eventually take some type of decision menu object that will help out with highlighting
 function drawDecisionMenu(){
   var decisionMenu = "";
+  decisionMenu += "WHICH WOULD YOU LIKE TO ADDRESS?\n";
+  decisionMenu += ui.drawBreak(80, " ");
+  //remove "policy" from this for final game copy
   decisionMenu += "1. Intelligence policy\n";
   decisionMenu += "2. Policing policy\n";
   decisionMenu += "3. Military policy\n";
@@ -83,10 +100,6 @@ function drawDecisionMenu(){
 }
 
 function recieveData(socket, data, turn) {
-  //increment time
-  //output time
-  var currentDate = gameState.getCurrentDate().toFormattedString();
-  socket.write(currentDate +" \n");
 
   //need to find a better way to catch the quit command
   var cleanData = cleanInput(data);
@@ -121,8 +134,10 @@ function newSocket(socket) {
     gameState.setTurn(turn);
     socket.write(drawNewsRoom());
     socket.write(drawDecisionMenu());
+    socket.write(drawIntelRoom());
     recieveData(socket, data, turn);
-    //should prob not increment every time input goes in
+    //should prob not increment every time input goes in, fix e.g.:
+    //if data = option 5, then:
     turn += 1;
   });
   socket.on('end', function() {
