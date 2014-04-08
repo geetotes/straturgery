@@ -77,20 +77,10 @@ function drawSigIntRoom(){
 
   room += ui.headlineHeader("INTELLIGENCE (1 of 2)", gameState, 41, 37) + "\n";
   room += ui.drawBreak(80, "\u25A9");
-  room += ui.drawBreak(80, " ");
-  room += ui.drawBreak(20, "\u2593");
-  room += "\u2593 SIGINT \u2593 \u25B3 wiretaps \u25BD drones \u2593\n";
-  room += ui.drawBreak(20, "\u2593");
   //maybe give updates on what's happening with sigint
-  room += ui.drawBreak(20, "\u2593");
-  room += "\u2593 HUMINT \u2593\n";
-  room += ui.drawBreak(20, "\u2593");
-  //this one is a binary choice
-  room += "Favor Hard Tatics";
-  room += "Favor Soft Tactics";
   room += ui.drawBreak(80, " ");
   room += ui.drawBreak(80, " ");
-  room += ui.statusWrapper("SIGINT", "wiretaps, drones", "\u2593");
+  room += ui.statusWrapper("SIGINT", "\u25B3 wiretaps \u25BD drones", "\u2593");
   room += ui.drawBreak(80, " ");
   room += "Current status report:\n";
   room += "\t* Est. 85% of electronic commuincations are being monitored\n";
@@ -182,6 +172,7 @@ function newSocket(socket) {
   //should figure out to start a new game or continue an old one somewhere here
   socket.on('data', function(data) {
     //socket.write(gameState.getCurrentMenu());
+    recieveData(socket, data, turn);
     var coords = gameState.getCoords();
     console.log(coords);
     if(coords.x === 0 && coords.y === 0){
@@ -192,7 +183,6 @@ function newSocket(socket) {
       socket.write(drawSigIntRoom());
     if(coords.x === 0 && coords.y === 2)
       socket.write(drawHumIntRoom());
-    recieveData(socket, data, turn);
     //should prob not increment every time input goes in, fix e.g.:
     //if data = option 5, then:
     turn += 1;

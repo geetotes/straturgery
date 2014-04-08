@@ -34,8 +34,15 @@ function wordList() {
       intelligence:{ x: 0, y: 1},
       policing:{ x: 1, y: 0}
     };
-    return wordMap;
   }
+  if(coords.x === 0 && coords.y ===1) {
+    wordMap = {
+      "increase wiretaps": { x: 0, y: 2},
+      "decrease wiretaps": { x: 0, y: 2}
+    };
+  }
+
+    return wordMap;
 }
 
 
@@ -50,7 +57,14 @@ exports.move = function(cleanData) {
   console.log(cleanData);
   //now make an array of smallest unique starts
   //match against regex
-  var matches = [], re = new RegExp("^" + cleanData, "gi");
+  //TODO: also refactor here
+  var matches = [], re;
+  if(cleanData.split(" ").length > 1)
+    re = new RegExp("\\b" + cleanData.split(" ")[0] + "\\w*\\W*\\b" + cleanData.split(" ")[1], "gi");
+  else
+    re = new RegExp("^" + cleanData, "gi");
+
+  console.log(re);
   validWordList.forEach(function(word) {
     if(word.match(re) !== null)
       matches.push(word);
