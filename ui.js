@@ -66,7 +66,6 @@ UI.prototype.drawIraqiFlag = function(cols, barHeight) {
   for(i = 0; i < ((80-cols)/2); i++) {
     spacer += " ";
   }
-
   for(i = 0; i< barHeight; i++) {
     redBarFinal += spacer + this.redBG(redBar) + "\n"; 
     blackBarFinal += spacer + this.blackBG(blackBar) + "\n"; 
@@ -81,10 +80,17 @@ UI.prototype.drawIraqiFlag = function(cols, barHeight) {
       greenBarFinal += spacer + this.greenOnWhite(greenBar) + "\n";
     }
   }
-
   return redBarFinal + greenBarFinal + blackBarFinal;
+};
 
+/*
+ * STUFF FOR THE INTEL ROOM
+ */
 
+UI.prototype.statusWrapper = function(label, description, character) {
+  var string = character + " " + label + " " + character + " " + description + " " + character;
+  var border = this.drawBreak((string.length + 1), character);
+  return border + string + "\n" + border;
 };
 
 module.exports = new UI();

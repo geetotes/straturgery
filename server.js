@@ -72,16 +72,56 @@ function drawNewsRoom(){
   return room;
 }
 
-function drawIntelRoom(){
+function drawSigIntRoom(){
   var room = "";
 
-  room += ui.headlineHeader("INTELLIGENCE", gameState, 41, 37) + "\n";
-  room += ui.drawBreak(80, "-");
+  room += ui.headlineHeader("INTELLIGENCE (1 of 2)", gameState, 41, 37) + "\n";
+  room += ui.drawBreak(80, "\u25A9");
   room += ui.drawBreak(80, " ");
-  room += ui.drawBreak(40, "\u00A9");
-  room += "* SIGINT * HUMINT *";
+  room += ui.drawBreak(20, "\u2593");
+  room += "\u2593 SIGINT \u2593 \u25B3 wiretaps \u25BD drones \u2593\n";
+  room += ui.drawBreak(20, "\u2593");
+  //maybe give updates on what's happening with sigint
+  room += ui.drawBreak(20, "\u2593");
+  room += "\u2593 HUMINT \u2593\n";
+  room += ui.drawBreak(20, "\u2593");
+  //this one is a binary choice
+  room += "Favor Hard Tatics";
+  room += "Favor Soft Tactics";
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  room += ui.statusWrapper("SIGINT", "wiretaps, drones", "\u2593");
+  room += ui.drawBreak(80, " ");
+  room += "Current status report:\n";
+  room += "\t* Est. 85% of electronic commuincations are being monitored\n";
+  room += "\t* Drone fleet is running at 50%";
+  room += ui.drawBreak(80, " ");
+  room += "OPTIONS:\n";
+  //these should have state
+  room += "Increase/Decrease Wiretaps\n";
+  room += "Increase/Decrease Predator\n";
+  room += "Do Nothing\n";
+  //if you run the drones too much, they will break down
+  //the more inteligence you collect, the more false positives you get
 
   return room;
+}
+
+function drawHumIntRoom(){
+  var room = "";
+  room += ui.headlineHeader("INTELLIGENCE (2 of 2)", gameState, 41, 37) + "\n";
+  room += ui.drawBreak(80, "\u25A9");
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  room += ui.statusWrapper("HUMINT", "hard tactics", "\u2593");
+  room += ui.drawBreak(80, " ");
+  room += "OPTIONS:\n";
+  room += "Favor Hard Tatics\n";
+  room += "Favor Soft Tactics\n";
+  room += "Do Nothing\n";
+
+  return room;
+
 }
 
 //this will eventually take some type of decision menu object that will help out with highlighting
@@ -134,7 +174,7 @@ function newSocket(socket) {
     gameState.setTurn(turn);
     socket.write(drawNewsRoom());
     socket.write(drawDecisionMenu());
-    socket.write(drawIntelRoom());
+    socket.write(drawHumIntRoom());
     recieveData(socket, data, turn);
     //should prob not increment every time input goes in, fix e.g.:
     //if data = option 5, then:
