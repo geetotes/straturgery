@@ -1,6 +1,7 @@
 /*jslint node: true, sloppy: true, white: true, vars: true */
 
 var net = require('net');
+var util = require('util');
 var sockets = [];
 
 var gameState = require('./gameState');
@@ -120,10 +121,10 @@ function drawDecisionMenu(){
   decisionMenu += "WHICH WOULD YOU LIKE TO ADDRESS?\n";
   decisionMenu += ui.drawBreak(80, " ");
   //remove "policy" from this for final game copy
-  decisionMenu += "1. Intelligence policy\n";
-  decisionMenu += "2. Policing policy\n";
-  decisionMenu += "3. Military policy\n";
-  decisionMenu += "4. Iran policy\n";
+  decisionMenu += "\x1B[1mIn\x1B[0mtelligence policy\n";
+  decisionMenu += "\x1B[1mP\x1B[0molicing policy\n";
+  decisionMenu += "\x1B[1mM\x1B[0military policy\n";
+  decisionMenu += "\x1B[1mIr\x1B[0man policy\n";
 
   return decisionMenu;
 
@@ -171,12 +172,12 @@ function newSocket(socket) {
   socket.write(drawWelcome());
   //should figure out to start a new game or continue an old one somewhere here
   socket.on('data', function(data) {
-    //socket.write(gameState.getCurrentMenu());
+    //analyze game state and see if new turn is ready?
+    socket.write(drawNewsRoom());
     recieveData(socket, data, turn);
     var coords = gameState.getCoords();
-    console.log(coords);
+    console.log("Reading coords: " + util.inspect(gameState));
     if(coords.x === 0 && coords.y === 0){
-      socket.write(drawNewsRoom());
       socket.write(drawDecisionMenu());
     }
     if(coords.x === 0 && coords.y === 1)

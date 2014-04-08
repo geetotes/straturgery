@@ -11,7 +11,7 @@ Date.prototype.toFormattedString = function() {
 };
 
 
-var currentDate, currentPosition, gameMap, coords = {};
+var currentDate, currentPosition, gameMap, coords = {}, headlines = {};
 
 function setCurrentDate(turn) {
   //months are zero based
@@ -38,7 +38,15 @@ function wordList() {
   if(coords.x === 0 && coords.y ===1) {
     wordMap = {
       "increase wiretaps": { x: 0, y: 2},
-      "decrease wiretaps": { x: 0, y: 2}
+      "decrease wiretaps": { x: 0, y: 2},
+      "do nothing": { x: 0, y: 2}
+    };
+  }
+  if(coords.x === 0 && coords.y === 2) {
+    wordMap = {
+      "favor hard": { x: 0, y: 0},
+      "favor soft": { x: 0, y: 0},
+      "do nothing": { x: 0, y: 0}
     };
   }
 
@@ -53,8 +61,8 @@ exports.move = function(cleanData) {
   //TODO: refactor here
   var validWordList = Object.keys(wordList());
   var wordMap = wordList();
-  console.log(validWordList);
-  console.log(cleanData);
+  //console.log(validWordList);
+  //console.log(cleanData);
   //now make an array of smallest unique starts
   //match against regex
   //TODO: also refactor here
@@ -64,7 +72,7 @@ exports.move = function(cleanData) {
   else
     re = new RegExp("^" + cleanData, "gi");
 
-  console.log(re);
+  //console.log(re);
   validWordList.forEach(function(word) {
     if(word.match(re) !== null)
       matches.push(word);
@@ -75,7 +83,7 @@ exports.move = function(cleanData) {
     return false;
   }else{
     coords = wordMap[matches[0]];
-    console.log(coords);
+    console.log("Coords updated: " + coords);
   }
     
 

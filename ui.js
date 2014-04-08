@@ -8,7 +8,6 @@ function UI() {}
 UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
   var endPadding = "";
   var currentDate = gameState.getCurrentDate();
-  console.log(currentDate);
   var textLength = text.length + currentDate.toFormattedString().length;
   for(var i = 0; i < (80 - textLength); i++)
     endPadding += " ";
