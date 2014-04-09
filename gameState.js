@@ -33,6 +33,7 @@ function setCurrentDate(turn) {
   console.log("set current date: " + turn);
   currentDate = new Date(startDate.getFullYear(), turn, startDate.getDate());
   decisionMenu = new DecisionMenu();
+  console.log(currentDate);
 }
 
 /* Game Map
@@ -119,7 +120,6 @@ exports.getCurrentDate = function() {
 
 exports.setTurn = function(turn) {
   this.turn = turn;
-  console.log(this.turn);
   setCurrentDate(this.turn);
 };
 

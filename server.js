@@ -176,8 +176,8 @@ function newSocket(socket) {
   //should figure out to start a new game or continue an old one somewhere here
   socket.on('data', function(data) {
     //analyze game state and see if new turn is ready?
-    socket.write(drawNewsRoom());
     recieveData(socket, data, turn);
+    socket.write(drawNewsRoom());
     var coords = gameState.getCoords();
     //console.log("Reading coords: " + util.inspect(gameState));
     if(coords.x === 0 && coords.y === 0){
