@@ -121,10 +121,11 @@ function drawDecisionMenu(){
   decisionMenu += "WHICH WOULD YOU LIKE TO ADDRESS?\n";
   decisionMenu += ui.drawBreak(80, " ");
   //remove "policy" from this for final game copy
-  decisionMenu += "\x1B[1mIn\x1B[0mtelligence policy\n";
-  decisionMenu += "\x1B[1mP\x1B[0molicing policy\n";
-  decisionMenu += "\x1B[1mM\x1B[0military policy\n";
-  decisionMenu += "\x1B[1mIr\x1B[0man policy\n";
+  //maybe work on combining colors... or make a ui color highlighting function
+  decisionMenu += "\x1B[1m\x1B[4mIn\x1B[0m\x1B[1mtelligence policy\x1B[0m\n";
+  decisionMenu += "\x1B[4mP\x1B[0molicing policy\n";
+  decisionMenu += "\x1B[4mM\x1B[0military policy\n";
+  decisionMenu += "\x1B[4mIr\x1B[0man policy\n";
 
   return decisionMenu;
 
