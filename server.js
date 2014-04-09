@@ -118,7 +118,26 @@ function drawHumIntRoom(){
 
 }
 
+function drawPolicingRoom() {
+  var room = "";
+  room += ui.headlineHeader("POLICING", gameState, 41, 37) + "\n";
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  room += ui.statusWrapper("Attacks on Civilians", "Checkpoints", "\u2593");
+  room += ui.statusWrapper("IED Attacks", "Checkpoints", "\u2593");
+  room += ui.statusWrapper("Small arms attacks", "Checkpoints", "\u2593");
+  room += ui.statusWrapper("Mortar/Rocket", "Checkpoints", "\u2593");
+
+  room += ui.drawBreak(80, " ");
+  room += ui.drawPolicingStats();
+
+  return room;
+}
+
+
 //this will eventually take some type of decision menu object that will help out with highlighting
+//THIS IS ALSO A GOOD EXAMPLE OF HOW BIG ALL OF THESE FUNCTIONS SHOULD BE EVENTUALLY
 function drawDecisionMenu(){
   var decisionMenu = "";
   decisionMenu += "WHICH WOULD YOU LIKE TO ADDRESS?\n";
@@ -175,20 +194,18 @@ function newSocket(socket) {
   socket.write(drawWelcome());
   //should figure out to start a new game or continue an old one somewhere here
   socket.on('data', function(data) {
-    //analyze game state and see if new turn is ready?
     recieveData(socket, data, turn);
-    socket.write(drawNewsRoom());
     var coords = gameState.getCoords();
-    //console.log("Reading coords: " + util.inspect(gameState));
     if(coords.x === 0 && coords.y === 0){
+      socket.write(drawNewsRoom());
       socket.write(drawDecisionMenu());
     }
     if(coords.x === 0 && coords.y === 1)
       socket.write(drawSigIntRoom());
     if(coords.x === 0 && coords.y === 2)
       socket.write(drawHumIntRoom());
-    //should prob not increment every time input goes in, fix e.g.:
-    //if data = option 5, then:
+    if(coords.x === 1 && coords.y === 0)
+      socket.write(drawPolicingRoom());
   });
   socket.on('end', function() {
     closeSocket(socket);

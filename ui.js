@@ -37,6 +37,43 @@ UI.prototype.blackBG = function(text) {
   return wrappedText;
 };
 
+UI.prototype.alignText = function(width, text, align) {
+  var difference = width - text.length, spacer = "";
+  //TODO: make this function accomidating of center and right aligns
+  for(var i = 0; i < difference; i ++) {
+    spacer += " ";
+  }
+  text = "|" + text + spacer + "|";
+  return text;
+};
+
+//takes two array of arrays
+UI.prototype.table = function(headers, data) {
+  var t = headers.slice(0), table = "";
+  console.log(headers);
+  t.sort(function(a, b){
+    return b.length - a.length;
+  });
+  var widest = t[0].length;
+  console.log(t);
+  console.log(headers);
+  for(var i = 0; i < headers.length; i ++){
+    table += this.alignText(widest, headers[i], "left");
+  }
+  console.log(table);
+  return table + "\n";
+
+};
+
+UI.prototype.drawPolicingStats = function() {
+
+  var headers = ["Type", "Casualties", "Trend"];
+  var data = [["Attacks on Civilians", "(4020)(482)(19K)", "Up/Down"],["IED Attacks", "(2821)(4391)(19K)", "Up/Down"]];
+  return this.table(headers, data);
+
+
+};
+
 UI.prototype.drawDecisionMenu = function(items) {
   var decisionMenu = "";
   /*
