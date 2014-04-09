@@ -15,6 +15,11 @@ UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
   return wrappedText; 
 };
 
+UI.prototype.makeBold = function(text) {
+  //eventually, need to use indexOf to detect the underlined text and wrap it
+  return "\x1B[1m" + text + "\x1B[0m";
+};
+
 UI.prototype.redBG = function(text) {
   var wrappedText = "\x1B[41m" + text + "\x1B[0m";
   return wrappedText;
@@ -28,6 +33,17 @@ UI.prototype.greenOnWhite = function(text) {
 UI.prototype.blackBG = function(text) {
   var wrappedText = "\x1B[40m\x1B[32m" + text + "\x1B[0m";
   return wrappedText;
+};
+
+UI.prototype.drawDecisionMenu = function(gameState) {
+  var decisionMenu = "";
+  //remove "policy" from this for final game copy
+  //maybe work on combining colors... or make a ui color highlighting function
+  decisionMenu += this.makeBold("\x1B[4mIn\x1B[0mtelligence policy\n");
+  decisionMenu += "\x1B[4mP\x1B[0molicing policy\n";
+  decisionMenu += "\x1B[4mM\x1B[0military policy\n";
+  decisionMenu += "\x1B[4mIr\x1B[0man policy\n";
+  return decisionMenu;
 };
 
 UI.prototype.drawBreak = function(cols, symbol) {

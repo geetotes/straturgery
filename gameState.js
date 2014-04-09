@@ -49,8 +49,7 @@ function wordList() {
       "do nothing": { x: 0, y: 0}
     };
   }
-
-    return wordMap;
+  return wordMap;
 }
 
 
@@ -85,20 +84,15 @@ exports.move = function(cleanData) {
     coords = wordMap[matches[0]];
     console.log("Coords updated: " + coords);
   }
-    
-
 };
-
 
 exports.getCoords = function() {
   return coords;
 };
 
-
 exports.setCoords = function(newCoords) {
   coords = newCoords;
 };
-
 
 exports.getHeadlineDate = function() {
   return currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1);
