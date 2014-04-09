@@ -39,10 +39,10 @@ UI.prototype.blackBG = function(text) {
 
 UI.prototype.drawDecisionMenu = function(items) {
   var decisionMenu = "";
-  //remove "policy" from this for final game copy
-  //maybe work on combining colors... or make a ui color highlighting function
-  console.log(items);
-
+  /*
+   * string.indexOf(i) is the key here!!!!!!
+   *
+   *
   var itemArray = Object.keys(items), highlightArray = {};
   itemArray.forEach(function(item) {
     var highlightAmount;
@@ -62,11 +62,10 @@ UI.prototype.drawDecisionMenu = function(items) {
   });
 
   console.log(util.inspect(highlightArray));
-
+*/
   for(var prop in items) {
     if(items[prop] === false){
-      //look up prop to get int for how many characters to make the underline
-      decisionMenu += this.makeBold(prop) + "\n";
+      decisionMenu += this.makeBold(prop) + "\n"; //look up prop to get int for how many characters to make the underline
     } else {
       decisionMenu += prop + "\n";
     }

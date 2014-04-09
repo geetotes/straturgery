@@ -172,7 +172,7 @@ function newSocket(socket) {
     socket.write(drawNewsRoom());
     recieveData(socket, data, turn);
     var coords = gameState.getCoords();
-    console.log("Reading coords: " + util.inspect(gameState));
+    //console.log("Reading coords: " + util.inspect(gameState));
     if(coords.x === 0 && coords.y === 0){
       socket.write(drawDecisionMenu());
     }
