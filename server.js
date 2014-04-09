@@ -120,7 +120,7 @@ function drawDecisionMenu(){
   var decisionMenu = "";
   decisionMenu += "WHICH WOULD YOU LIKE TO ADDRESS?\n";
   decisionMenu += ui.drawBreak(80, " ");
-  decisionMenu += ui.drawDecisionMenu(gameState);
+  decisionMenu += ui.drawDecisionMenu(gameState.getDecisionMenu());
 
   return decisionMenu;
 

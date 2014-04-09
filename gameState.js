@@ -10,15 +10,28 @@ Date.prototype.toFormattedString = function() {
   return "[" + currentDate.getMonthName() + " " + currentDate.getFullYear() + "]";
 };
 
+var util = require('util');
 
-var currentDate, currentPosition, gameMap, coords = {}, headlines = {};
+var currentDate, currentPosition, gameMap, coords = {}, headlines = {}, decisionMenu;
 
+//make the decision menu with defaults for every new turn
+function DecisionMenu() {}
+
+DecisionMenu.prototype.items = {
+  "Intelligence": false,
+  "Policing": false,
+  "Military": false,
+  "Iran": false
+};
+
+//fill-in for function to increment turns (start a new turn)
 function setCurrentDate(turn) {
   //months are zero based
   startDate = new Date(2007, 0, 1);
   //eventually, we will use the endDate condition to determine the end of the game
   endDate = new Date(2011, 0, 1);
   currentDate = new Date(startDate.getFullYear(), turn, startDate.getDate());
+  decisionMenu = new DecisionMenu();
 }
 
 /* Game Map
@@ -108,4 +121,13 @@ exports.setTurn = function(turn) {
 
 exports.getTurn = function() {
   return turn;
+};
+
+exports.getDecisionMenu = function() {
+  //return current state of decision menu
+  return decisionMenu.items;
+};
+
+exports.setDecisionMenu = function(key, value) {
+  //set true or false on a decision menu key
 };

@@ -2,6 +2,7 @@
 
 //DESIGN NOTE: there should be no newlines or color strings in main function
 
+var util = require('util');
 
 //takes bg and fg as ints
 function UI() {}
@@ -17,6 +18,7 @@ UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
 
 UI.prototype.makeBold = function(text) {
   //eventually, need to use indexOf to detect the underlined text and wrap it
+  //function should probably go through the menu options and handle the highlighting automagically
   return "\x1B[1m" + text + "\x1B[0m";
 };
 
@@ -35,14 +37,46 @@ UI.prototype.blackBG = function(text) {
   return wrappedText;
 };
 
-UI.prototype.drawDecisionMenu = function(gameState) {
+UI.prototype.drawDecisionMenu = function(items) {
   var decisionMenu = "";
   //remove "policy" from this for final game copy
   //maybe work on combining colors... or make a ui color highlighting function
+  console.log(items);
+
+  var itemArray = Object.keys(items), highlightArray = {};
+  itemArray.forEach(function(item) {
+    var highlightAmount;
+    for(var i = 0; i < item.length; i ++){
+      var letter = item[i];
+      for(var j = 0; j < itemArray.length; j++) {
+        if(itemArray[j] !== item && itemArray[j][i] == item[i]){
+          console.log("comparing " + itemArray[j] + " to " + item);
+          console.log(itemArray[j][i] + " matches " + item[i]);
+          highlightAmount = i;
+          return;
+        }
+      }
+    }
+    console.log(item);
+    highlightArray[item] = highlightAmount;
+  });
+
+  console.log(util.inspect(highlightArray));
+
+  for(var prop in items) {
+    if(items[prop] === false){
+      //look up prop to get int for how many characters to make the underline
+      decisionMenu += this.makeBold(prop) + "\n";
+    } else {
+      decisionMenu += prop + "\n";
+    }
+  }
+  /*
   decisionMenu += this.makeBold("\x1B[4mIn\x1B[0mtelligence policy\n");
   decisionMenu += "\x1B[4mP\x1B[0molicing policy\n";
   decisionMenu += "\x1B[4mM\x1B[0military policy\n";
   decisionMenu += "\x1B[4mIr\x1B[0man policy\n";
+  */
   return decisionMenu;
 };
 
