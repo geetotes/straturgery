@@ -30,6 +30,7 @@ function setCurrentDate(turn) {
   startDate = new Date(2007, 0, 1);
   //eventually, we will use the endDate condition to determine the end of the game
   endDate = new Date(2011, 0, 1);
+  console.log("set current date: " + turn);
   currentDate = new Date(startDate.getFullYear(), turn, startDate.getDate());
   decisionMenu = new DecisionMenu();
 }
@@ -45,7 +46,8 @@ function wordList() {
   if(coords.x === 0 && coords.y === 0) {
     wordMap = {
       intelligence:{ x: 0, y: 1},
-      policing:{ x: 1, y: 0}
+      policing:{ x: 1, y: 0},
+      next: { x: 0, y: 0}
     };
   }
   if(coords.x === 0 && coords.y ===1) {
@@ -116,11 +118,19 @@ exports.getCurrentDate = function() {
 };
 
 exports.setTurn = function(turn) {
-  setCurrentDate(turn);
+  this.turn = turn;
+  console.log(this.turn);
+  setCurrentDate(this.turn);
+};
+
+exports.nextTurn = function() {
+  this.turn = this.turn + 1;
+  console.log("nexted :" + this.turn);
+  setCurrentDate(this.turn);
 };
 
 exports.getTurn = function() {
-  return turn;
+  return this.turn;
 };
 
 exports.getDecisionMenu = function() {
@@ -130,4 +140,5 @@ exports.getDecisionMenu = function() {
 
 exports.setDecisionMenu = function(key, value) {
   //set true or false on a decision menu key
+  decisionMenu.items[key] = value;
 };

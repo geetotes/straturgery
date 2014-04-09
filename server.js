@@ -7,6 +7,7 @@ var sockets = [];
 var gameState = require('./gameState');
 var ui = require('./ui');
 
+
 //From SO: http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array/18650169#18650169
 Array.prototype.shuffle = function() {
   var i = this.length, j, temp;
@@ -25,8 +26,7 @@ function cleanInput(data) {
 }
 
 function drawWelcome(){
-  //remove these codes
-  var welcome = "\x1B[31m";
+  var welcome = "\x1B[2J\x1B[31m";
   welcome += ui.drawBreak(80, "-");
   welcome += ui.centerText(80, " ", "Welcome to");
   welcome += ui.centerText(80, " ", "STRATURGERY");
@@ -43,7 +43,7 @@ function drawWelcome(){
 //from SO: http://stackoverflow.com/questions/10058814/get-data-from-fs-readfile
 //but then decided that async didn't really work here, since i need to return the headlines so far up the call stack
 //now looking at: http://stackoverflow.com/questions/10011011/using-node-js-how-do-i-read-a-json-object-into-server-memory
-//SO links for future refrence
+//SO links for future refrence/blog post
 function fetchHeadlines() {
   var fs = require('fs');
   var file = __dirname + '/headlines.json';
@@ -111,6 +111,9 @@ function drawHumIntRoom(){
   room += "Favor Soft Tactics\n";
   room += "Do Nothing\n";
 
+  //make sure intel section is completed
+  gameState.setDecisionMenu("Intelligence", true);
+
   return room;
 
 }
@@ -135,7 +138,12 @@ function recieveData(socket, data, turn) {
   }
   else {
     //should simply update coordinates
+    if (cleanData == "next"){
+      gameState.nextTurn();
+      console.log("Turn #" + gameState.getTurn());
+    }
     gameState.move(cleanData);
+
     for (var i = 0; i<sockets.length; i++){
       if (sockets[i] !== socket) {
         //sockets[i].write(data);
@@ -155,8 +163,7 @@ function closeSocket(socket) {
 }
 
 function newSocket(socket) {
-  //starting variables
-  var turn = 0, coords = {};
+  var coords = {}, turn = 0;//starting variables;
   coords.x = 0;
   coords.y = 0;
   //set the initial turn # and position in the "map"
@@ -182,7 +189,6 @@ function newSocket(socket) {
       socket.write(drawHumIntRoom());
     //should prob not increment every time input goes in, fix e.g.:
     //if data = option 5, then:
-    turn += 1;
   });
   socket.on('end', function() {
     closeSocket(socket);
