@@ -4,8 +4,9 @@
 
 var util = require('util');
 
-//takes bg and fg as ints
 function UI() {}
+
+//takes bg and fg as ints
 UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
   var endPadding = "";
   var currentDate = gameState.getCurrentDate();
@@ -13,6 +14,19 @@ UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
   for(var i = 0; i < (80 - textLength); i++)
     endPadding += " ";
   var wrappedText = "\x1B[0m\x1B[" + bg + "m\x1B["+ fg +"m" + text + endPadding + currentDate.toFormattedString() + "\x1B[0m";
+
+  //let's see if we can make a little gradient
+  
+  wrappedText += "\n";
+  //for i in {16..21} {21..16} ; do echo -en "\e[48;5;${i}m \e[0m" ; done ; echo
+
+  for(i = 16; i < 21; i++) {
+    //BLOG: look here. 48 prefix needed to put it into background 256 color
+    wrappedText += "\x1B[48;5;" + i + "m" + i + " \x1B[0m";
+    console.log("\033[48;5;" + i + "m" + i + " \x1b[0m");
+
+  }
+
   return wrappedText; 
 };
 
@@ -69,6 +83,7 @@ UI.prototype.drawPolicingStats = function() {
 
   var headers = ["Type", "Casualties", "Trend"];
   var data = [["Attacks on Civilians", "(4020)(482)(19K)", "Up/Down"],["IED Attacks", "(2821)(4391)(19K)", "Up/Down"]];
+  //TODO: Finish up this function
   return this.table(headers, data);
 
 
