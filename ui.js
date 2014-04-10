@@ -19,13 +19,24 @@ UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
   
   wrappedText += "\n";
   //for i in {16..21} {21..16} ; do echo -en "\e[48;5;${i}m \e[0m" ; done ; echo
+  var endGradient = "", startBlock = "";
 
-  for(i = 16; i < 21; i++) {
+  for(i = 5; i > 0 ; i--) {
     //BLOG: look here. 48 prefix needed to put it into background 256 color
-    wrappedText += "\x1B[48;5;" + i + "m" + i + " \x1B[0m";
-    console.log("\033[48;5;" + i + "m" + i + " \x1b[0m");
-
+    var x = (i * 36) + 16;
+    endGradient += "\x1B[48;5;" + x + "m \x1B[0m";
   }
+
+  //assuming 80 chars wide here again
+  var remainingGap = "";
+  console.log(endGradient.length);
+  //need to work out correct math for this
+  for(i = 0; i < (74); i ++){
+    remainingGap += "\x1B[48;5;196m \x1B[0m";
+  }
+
+  wrappedText += remainingGap + endGradient;
+  
 
   return wrappedText; 
 };
