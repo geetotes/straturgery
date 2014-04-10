@@ -4,6 +4,26 @@
 
 var util = require('util');
 
+String.prototype.printedLength = function() {
+  var i = this.length, re, temp = "", match = "";
+  if ( i === 0 ) return this;
+  while ( --i) {
+    if(this.charCodeAt(i) !== 27)
+      temp += this[i];
+  }
+  re = /(m\w*)\[|(m\w*;\w*;\w*)\[/gi;
+  //this is now a crazy regular expression problem
+  match = temp.replace(re, "");
+  console.log("temp: " + temp);
+  console.log("match: " + match);
+  console.log("typeof: " + typeof match);
+  for(i = 0; i < match.length; i ++){
+    //console.log(match.charCodeAt(i));
+  }
+  console.log("match length: " + match.length);
+  return match.length;
+};
+
 function UI() {}
 
 //takes bg and fg as ints
@@ -26,10 +46,12 @@ UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
     var x = (i * 36) + 16;
     endGradient += "\x1B[48;5;" + x + "m \x1B[0m";
   }
+  console.log(endGradient.printedLength());
+
+  endGradient += "\x1b[97m" + currentDate.toFormattedString() + "\x1b[0m";
 
   //assuming 80 chars wide here again
   var remainingGap = "";
-  console.log(endGradient.length);
   //need to work out correct math for this
   for(i = 0; i < (74); i ++){
     remainingGap += "\x1B[48;5;196m \x1B[0m";
