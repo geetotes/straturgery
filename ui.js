@@ -11,16 +11,9 @@ String.prototype.printedLength = function() {
     if(this.charCodeAt(i) !== 27)
       temp += this[i];
   }
-  re = /(m\w*)\[|(m\w*;\w*;\w*)\[/gi;
   //this is now a crazy regular expression problem
+  re = /(m\w*)\[|(m\w*;\w*;\w*)\[/gi;
   match = temp.replace(re, "");
-  console.log("temp: " + temp);
-  console.log("match: " + match);
-  console.log("typeof: " + typeof match);
-  for(i = 0; i < match.length; i ++){
-    //console.log(match.charCodeAt(i));
-  }
-  console.log("match length: " + match.length);
   return match.length;
 };
 
@@ -31,33 +24,32 @@ UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
   var endPadding = "";
   var currentDate = gameState.getCurrentDate();
   var textLength = text.length + currentDate.toFormattedString().length;
-  for(var i = 0; i < (80 - textLength); i++)
+  for(var i = 0; i < (80 - textLength); i++){
     endPadding += " ";
+  }
   var wrappedText = "\x1B[0m\x1B[" + bg + "m\x1B["+ fg +"m" + text + endPadding + currentDate.toFormattedString() + "\x1B[0m";
 
   //let's see if we can make a little gradient
   
   wrappedText += "\n";
   //for i in {16..21} {21..16} ; do echo -en "\e[48;5;${i}m \e[0m" ; done ; echo
-  var endGradient = "", startBlock = "";
+  var endGradient = "", startBlock = "", endBlock = "";
 
   for(i = 5; i > 0 ; i--) {
     //BLOG: look here. 48 prefix needed to put it into background 256 color
     var x = (i * 36) + 16;
     endGradient += "\x1B[48;5;" + x + "m \x1B[0m";
   }
-  console.log(endGradient.printedLength());
 
   endGradient += "\x1b[97m" + currentDate.toFormattedString() + "\x1b[0m";
+  console.log(endGradient.printedLength());
 
   //assuming 80 chars wide here again
-  var remainingGap = "";
-  //need to work out correct math for this
-  for(i = 0; i < (74); i ++){
-    remainingGap += "\x1B[48;5;196m \x1B[0m";
+  for(i = 0; i < (80 - endGradient.printedLength()); i ++){
+    startBlock += "\x1B[48;5;196m \x1B[0m";
   }
 
-  wrappedText += remainingGap + endGradient;
+  wrappedText += startBlock + endGradient;
   
 
   return wrappedText; 
