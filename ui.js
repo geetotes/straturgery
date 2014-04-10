@@ -33,7 +33,7 @@ UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
   
   wrappedText += "\n";
   //for i in {16..21} {21..16} ; do echo -en "\e[48;5;${i}m \e[0m" ; done ; echo
-  var endGradient = "", startBlock = "", endBlock = "";
+  var endGradient = "", startBlock = "", endBlock = "", titleText = "";
 
   for(i = 5; i > 0 ; i--) {
     //BLOG: look here. 48 prefix needed to put it into background 256 color
@@ -44,12 +44,20 @@ UI.prototype.headlineHeader = function(text, gameState, bg, fg) {
   endGradient += "\x1b[97m" + currentDate.toFormattedString() + "\x1b[0m";
   console.log(endGradient.printedLength());
 
+  titleText = "MAGIC SPECIAL SCREEN (1 OF 2)";
+  titleText = "\x1B[48;5;196m\x1B[97m" + titleText + "\x1B[0m";
+
   //assuming 80 chars wide here again
-  for(i = 0; i < (80 - endGradient.printedLength()); i ++){
+  for(i = 0; i < (80 - (titleText.printedLength() + endGradient.printedLength() + 1)); i ++){
     startBlock += "\x1B[48;5;196m \x1B[0m";
   }
 
-  wrappedText += startBlock + endGradient;
+  wrappedText += this.drawBreak(80, "\x1B[38;5;237;4m \x1B[0m");
+
+
+  wrappedText += titleText + startBlock + endGradient;
+  wrappedText += "\n";
+  wrappedText += this.drawBreak(80, "\x1B[38;5;237m\u203E\x1B[0m");
   
 
   return wrappedText; 
