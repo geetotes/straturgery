@@ -30,10 +30,8 @@ function setCurrentDate(turn) {
   startDate = new Date(2007, 0, 1);
   //eventually, we will use the endDate condition to determine the end of the game
   endDate = new Date(2011, 0, 1);
-  console.log("set current date: " + turn);
   currentDate = new Date(startDate.getFullYear(), turn, startDate.getDate());
   decisionMenu = new DecisionMenu();
-  console.log(currentDate);
 }
 
 /* Game Map
@@ -76,8 +74,6 @@ exports.move = function(cleanData) {
   //TODO: refactor here
   var validWordList = Object.keys(wordList());
   var wordMap = wordList();
-  //console.log(validWordList);
-  //console.log(cleanData);
   //now make an array of smallest unique starts
   //match against regex
   //TODO: also refactor here
@@ -97,17 +93,19 @@ exports.move = function(cleanData) {
     //umm????
     return false;
   }else{
-    coords = wordMap[matches[0]];
-    console.log("Coords updated: " + coords);
+    this.coords = wordMap[matches[0]];
+    console.log("Coords updated: " + this.coords);
   }
 };
 
 exports.getCoords = function() {
-  return coords;
+  console.log('coords are: ' + this.coords);
+  return this.coords;
 };
 
-exports.setCoords = function(newCoords) {
-  coords = newCoords;
+exports.setCoords = function(coords) {
+  this.coords = coords;
+  console.log('coords set: ' + this.coords);
 };
 
 exports.getHeadlineDate = function() {

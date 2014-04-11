@@ -2,6 +2,8 @@
 
 var net = require('net');
 var util = require('util');
+var TelnetInput = require('telnet-stream').TelnetInput;
+var TelnetOutput = require('telnet-stream').TelnetOutput;
 var sockets = [];
 
 var gameState = require('./gameState');
@@ -34,6 +36,7 @@ function drawWelcome(){
   welcome += "\x1B[39m";
   welcome += ui.drawIraqiFlag(30, 3);
   welcome += ui.centerText(80, " ", "The Game of Pulling Out");
+  welcome += ("\x1b[5;5H Testing!");
 
   return welcome;
 }
@@ -74,9 +77,8 @@ function drawNewsRoom(){
 }
 
 function drawSigIntRoom(){
-  var room = "";
-
-  room += ui.headlineHeader("INTELLIGENCE (1 of 2)", gameState, 41, 37) + "\n";
+  var room = ui.clearScreen;
+  room += ui.intelHeadline("INTELLIGENCE (1 of 2)", gameState) + "\n";
   room += ui.drawBreak(80, "\u25A9");
   //maybe give updates on what's happening with sigint
   room += ui.drawBreak(80, " ");
@@ -99,8 +101,8 @@ function drawSigIntRoom(){
 }
 
 function drawHumIntRoom(){
-  var room = "";
-  room += ui.headlineHeader("INTELLIGENCE (2 of 2)", gameState, 41, 37) + "\n";
+  var room = ui.clearScreen;
+  room += ui.intelHeadline("INTELLIGENCE (2 of 2)", gameState) + "\n";
   room += ui.drawBreak(80, "\u25A9");
   room += ui.drawBreak(80, " ");
   room += ui.drawBreak(80, " ");
@@ -161,7 +163,12 @@ function recieveData(socket, data, turn) {
       gameState.nextTurn();
       console.log("Turn #" + gameState.getTurn());
     }
-    gameState.move(cleanData);
+    console.log('cleanData: ' + util.inspect(cleanData));
+    console.log("cleanData: " + cleanData);
+    console.log("Matchy: " + cleanData.match(/SECRETCODE/gi));
+    if(cleanData.match(/\w*/gi)){
+      //gameState.move(cleanData);
+    }
 
     for (var i = 0; i<sockets.length; i++){
       if (sockets[i] !== socket) {
@@ -193,6 +200,27 @@ function newSocket(socket) {
 
   socket.write(drawWelcome());
   //should figure out to start a new game or continue an old one somewhere here
+
+  var telnetInput = new TelnetInput();
+  var telnetOutput = new TelnetOutput();
+  var NAWS = 31;
+
+  telnetInput.on('sub', function(option, buffer) {
+    if(option === NAWS) {
+      var width = buffer.readInt16BE(0);
+      var height = buffer.readInt16BE(2);
+      console.log('Client window: ' + width + 'x' + height);
+      buffer.fill("0");
+    }
+  });
+
+  socket.pipe(telnetInput).pipe(process.stdout);
+  process.stdin.pipe(telnetOutput).pipe(socket);
+
+
+  //dont want any of the telnet input crap
+  //telnetOutput.writeDo(NAWS);
+
   socket.on('data', function(data) {
     recieveData(socket, data, turn);
     var coords = gameState.getCoords();
