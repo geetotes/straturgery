@@ -37,12 +37,12 @@ function setCurrentDate(turn) {
 /* Game Map
 0 1 2
 Home Screen, Intel 1, Intel 2
+Policing
 */
 
 //this will eventually be part of a gameMap object
 function wordList(coords) {
   var wordMap = {};
-  console.log("frm word list: " + util.inspect(coords));
   if(coords.x === 0 && coords.y === 0) {
     wordMap = {
       intelligence:{ x: 0, y: 1},
@@ -83,20 +83,14 @@ exports.move = function(cleanData) {
     re = new RegExp("\\b" + cleanData.split(" ")[0] + "\\w*\\W*\\b" + cleanData.split(" ")[1], "gi");
   else
     re = new RegExp("^" + cleanData, "gi");
-  console.log("custom re: " + re);
 
-  console.log(util.inspect(this.coords));
-  console.log("Word list: " + util.inspect(wordMap));
   validWordList.forEach(function(word) {
     if(word.match(re) !== null)
       matches.push(word);
   });
-  console.log("Matches " + matches);
 
   if(matches.length === 1) {
-    console.log("Matches:" + matches.length);
     this.coords = wordMap[matches[0]];
-    console.log("Coords updated: " + this.coords);
   }else{
     //now we have an array of matches, but if it is bigger then one, we have a double match and need more input
     return false;
@@ -104,13 +98,11 @@ exports.move = function(cleanData) {
 };
 
 exports.getCoords = function() {
-  console.log('coords are: ' + util.inspect(this.coords));
   return this.coords;
 };
 
 exports.setCoords = function(coords) {
   this.coords = coords;
-  console.log('coords set: ' + this.coords);
 };
 
 exports.getHeadlineDate = function() {
@@ -128,7 +120,6 @@ exports.setTurn = function(turn) {
 
 exports.nextTurn = function() {
   this.turn = this.turn + 1;
-  console.log("nexted :" + this.turn);
   setCurrentDate(this.turn);
 };
 

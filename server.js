@@ -120,17 +120,19 @@ function drawHumIntRoom(){
 }
 
 function drawPolicingRoom() {
-  var room = "";
+  var room = "\x1b[2J";
   room += ui.headlineHeader("POLICING", gameState, 41, 37) + "\n";
   room += ui.drawBreak(80, " ");
   room += ui.drawBreak(80, " ");
   room += ui.drawBreak(80, " ");
+  /*
   room += ui.statusWrapper("Attacks on Civilians", "Checkpoints", "\u2593");
   room += ui.statusWrapper("IED Attacks", "Checkpoints", "\u2593");
   room += ui.statusWrapper("Small arms attacks", "Checkpoints", "\u2593");
   room += ui.statusWrapper("Mortar/Rocket", "Checkpoints", "\u2593");
 
   room += ui.drawBreak(80, " ");
+  */
   room += ui.drawPolicingStats();
 
   return room;
@@ -203,7 +205,7 @@ function newSocket(socket) {
       var width = buffer.readInt16BE(0);
       var height = buffer.readInt16BE(2);
       console.log('Client window: ' + width + 'x' + height);
-      buffer.fill("0");
+      //buffer.fill("0");
     }
   });
 
@@ -212,7 +214,7 @@ function newSocket(socket) {
 
 
   //dont want any of the telnet input crap
-  //telnetOutput.writeDo(NAWS);
+  telnetOutput.writeDo(NAWS);
 
   socket.on('data', function(data) {
     recieveData(socket, data, turn);

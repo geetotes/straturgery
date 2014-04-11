@@ -60,24 +60,41 @@ UI.prototype.alignText = function(width, text, align) {
   for(var i = 0; i < difference; i ++) {
     spacer += " ";
   }
-  text = "|" + text + spacer + "|";
+  text = "[" + text + spacer + "]";
   return text;
 };
 
 //takes two array of arrays
 UI.prototype.table = function(headers, data) {
   var t = headers.slice(0), table = "";
-  console.log(headers);
+  console.log(data.length);
   t.sort(function(a, b){
     return b.length - a.length;
   });
   var widest = t[0].length;
-  console.log(t);
-  console.log(headers);
+  //now draw the data
+  data.forEach(function(datum) {
+    var tt = datum.slice(0);
+    tt.sort(function(a, b){
+      return b.length - a.length;
+    });
+    if(tt[0].length > widest) {
+      widest = tt[0].length;
+    }
+  });
+
   for(var i = 0; i < headers.length; i ++){
     table += this.alignText(widest, headers[i], "left");
   }
-  console.log(table);
+  var headerWidth = table.length + 1;
+  table += "\n" + this.drawBreak(headerWidth, "\u203E");
+  for(i = 0; i < data.length; i++){
+    for(var j = 0; j < data[i].length; j++) {
+      table += this.alignText(widest, data[i][j], "left");
+    }
+    table += "\n";
+  }
+
   return table + "\n";
 
 };
@@ -193,7 +210,6 @@ UI.prototype.drawIraqiFlag = function(cols, barHeight) {
 UI.prototype.intelHeadline = function(text, gameState) {
   var endGradient = "", startBlock = "", wrappedText = "", titleText = "", currentDate = gameState.getCurrentDate();
   for(i = 5; i > 0 ; i--) {
-    //BLOG: look here. 48 prefix needed to put it into background 256 color
     var x = (i * 36) + 16;
     endGradient += "\x1B[48;5;" + x + "m \x1B[0m";
   }
