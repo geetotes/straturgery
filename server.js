@@ -134,8 +134,37 @@ function drawPolicingRoom() {
   room += ui.drawBreak(80, " ");
   */
   room += ui.drawPolicingStats();
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  room += "Average civilian travel time from x to b: up/down\n";
+  room += "# of patrols per 24 hours for an average neighborhood: 1.2\n";
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  room += "Build checkpoints\n";
+  room += "Increase day patrols\n";
+  room += "Increase night patrols\n";
+  room += "Do nothing\n";
+  gameState.setDecisionMenu("Policing", true);
 
   return room;
+}
+
+function drawMilitaryRoom(){
+  var room = "\x1b[2J";
+  room += ui.headlineHeader("Military", gameState, 41, 37) + "\n";
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  room += "Status of major cities? Status of troops?\n";
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  room += "Occupy/Info/Withdraw city?: \n";
+  room += "Baghdad\n";
+  room += "Basra\n";
+  room += "Tikrit\n";
+  room += "Finish\n";
+  gameState.setDecisionMenu("Military", true);
+  return room;
+
 }
 
 
@@ -229,6 +258,8 @@ function newSocket(socket) {
       socket.write(drawHumIntRoom());
     if(coords.x === 1 && coords.y === 0)
       socket.write(drawPolicingRoom());
+    if(coords.x === 1 && coords.y === 1)
+      socket.write(drawMilitaryRoom());
   });
   socket.on('end', function() {
     closeSocket(socket);

@@ -37,7 +37,7 @@ function setCurrentDate(turn) {
 /* Game Map
 0 1 2
 Home Screen, Intel 1, Intel 2
-Policing
+Policing, Military, Iran
 */
 
 //this will eventually be part of a gameMap object
@@ -47,6 +47,7 @@ function wordList(coords) {
     wordMap = {
       intelligence:{ x: 0, y: 1},
       policing:{ x: 1, y: 0},
+      military:{ x: 1, y: 1},
       next: { x: 0, y: 0}
     };
   }
@@ -64,6 +65,23 @@ function wordList(coords) {
       "do nothing": { x: 0, y: 0}
     };
   }
+  if(coords.x === 1 && coords.y === 0){
+    wordMap = {
+      "build checkpoints": { x: 0, y: 0},
+      "increase day patrols": { x: 0, y: 0},
+      "increase night patrols": { x: 0, y: 0},
+      "do nothing": { x: 0, y: 0}
+    };
+  }
+  if(coords.x === 1 && coords.y === 1){
+    wordMap = {
+      "baghdad": { x: 1, y: 1},
+      "basra": { x: 1, y: 1},
+      "tikrit": { x: 1, y: 1},
+      "finish": { x: 0, y: 0}
+    };
+  }
+
   return wordMap;
 }
 
@@ -88,8 +106,11 @@ exports.move = function(cleanData) {
     if(word.match(re) !== null)
       matches.push(word);
   });
+  console.log(matches);
 
   if(matches.length === 1) {
+    console.log(this.coords);
+    console.log(wordMap[matches[0]]);
     this.coords = wordMap[matches[0]];
   }else{
     //now we have an array of matches, but if it is bigger then one, we have a double match and need more input

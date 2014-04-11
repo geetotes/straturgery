@@ -101,8 +101,13 @@ UI.prototype.table = function(headers, data) {
 
 UI.prototype.drawPolicingStats = function() {
 
-  var headers = ["Type", "Casualties", "Trend"];
-  var data = [["Attacks on Civilians", "(4020)(482)(19K)", "Up/Down"],["IED Attacks", "(2821)(4391)(19K)", "Up/Down"]];
+  var headers = ["Type", "Casualties (US)(IR)(Civ)", "Trend"];
+  var data = [
+    ["Attacks on Civilians", "(4020)(482)(19K)", "Up/Down"],
+    ["IED Attacks", "(2821)(4391)(19K)", "Up/Down"],
+    ["Small Arms Attacks", "(123)(456)(32)", "Up/Down"],
+    ["Mortar/Rocket", "(123)(456)(789)", "Up/Down"]
+      ];
   //TODO: Finish up this function
   return this.table(headers, data);
 
