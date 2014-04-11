@@ -36,7 +36,6 @@ function drawWelcome(){
   welcome += "\x1B[39m";
   welcome += ui.drawIraqiFlag(30, 3);
   welcome += ui.centerText(80, " ", "The Game of Pulling Out");
-  welcome += ("\x1b[5;5H Testing!");
 
   return welcome;
 }
@@ -161,14 +160,8 @@ function recieveData(socket, data, turn) {
     //should simply update coordinates
     if (cleanData == "next"){
       gameState.nextTurn();
-      console.log("Turn #" + gameState.getTurn());
     }
-    console.log('cleanData: ' + util.inspect(cleanData));
-    console.log("cleanData: " + cleanData);
-    console.log("Matchy: " + cleanData.match(/SECRETCODE/gi));
-    if(cleanData.match(/\w*/gi)){
-      //gameState.move(cleanData);
-    }
+    gameState.move(cleanData);
 
     for (var i = 0; i<sockets.length; i++){
       if (sockets[i] !== socket) {

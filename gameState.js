@@ -40,8 +40,9 @@ Home Screen, Intel 1, Intel 2
 */
 
 //this will eventually be part of a gameMap object
-function wordList() {
+function wordList(coords) {
   var wordMap = {};
+  console.log("frm word list: " + util.inspect(coords));
   if(coords.x === 0 && coords.y === 0) {
     wordMap = {
       intelligence:{ x: 0, y: 1},
@@ -72,8 +73,8 @@ exports.move = function(cleanData) {
   //then compare to a list of words
   //then move the coords based on the valid word
   //TODO: refactor here
-  var validWordList = Object.keys(wordList());
-  var wordMap = wordList();
+  var validWordList = Object.keys(wordList(this.coords));
+  var wordMap = wordList(this.coords);
   //now make an array of smallest unique starts
   //match against regex
   //TODO: also refactor here
@@ -82,24 +83,28 @@ exports.move = function(cleanData) {
     re = new RegExp("\\b" + cleanData.split(" ")[0] + "\\w*\\W*\\b" + cleanData.split(" ")[1], "gi");
   else
     re = new RegExp("^" + cleanData, "gi");
+  console.log("custom re: " + re);
 
-  //console.log(re);
+  console.log(util.inspect(this.coords));
+  console.log("Word list: " + util.inspect(wordMap));
   validWordList.forEach(function(word) {
     if(word.match(re) !== null)
       matches.push(word);
   });
-  //now we have an array of matches, but if it is bigger then one, we have a double match and need more input
-  if(matches.length > 1) {
-    //umm????
-    return false;
-  }else{
+  console.log("Matches " + matches);
+
+  if(matches.length === 1) {
+    console.log("Matches:" + matches.length);
     this.coords = wordMap[matches[0]];
     console.log("Coords updated: " + this.coords);
+  }else{
+    //now we have an array of matches, but if it is bigger then one, we have a double match and need more input
+    return false;
   }
 };
 
 exports.getCoords = function() {
-  console.log('coords are: ' + this.coords);
+  console.log('coords are: ' + util.inspect(this.coords));
   return this.coords;
 };
 
