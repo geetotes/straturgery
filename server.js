@@ -164,7 +164,19 @@ function drawMilitaryRoom(){
   room += "Finish\n";
   gameState.setDecisionMenu("Military", true);
   return room;
+}
 
+function drawIranRoom(){
+  var room = "\x1b[2J";
+  room += ui.headlineHeader("Iran", gameState, 41, 37) + "\n";
+  room += ui.drawBreak(80, " ");
+  room += ui.drawBreak(80, " ");
+  room += "CIA OPERATIVE: This week, ___ number agents captured. Intel indicates...\n";
+  room += "Iran Policy:\n";
+  room += "Capture and kill\n";
+  room += "Catch and release\n";
+  gameState.setDecisionMenu("Iran", true);
+  return room;
 }
 
 
@@ -260,6 +272,8 @@ function newSocket(socket) {
       socket.write(drawPolicingRoom());
     if(coords.x === 1 && coords.y === 1)
       socket.write(drawMilitaryRoom());
+    if(coords.x === 1 && coords.y === 2)
+      socket.write(drawIranRoom());
   });
   socket.on('end', function() {
     closeSocket(socket);

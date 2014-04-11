@@ -48,6 +48,7 @@ function wordList(coords) {
       intelligence:{ x: 0, y: 1},
       policing:{ x: 1, y: 0},
       military:{ x: 1, y: 1},
+      iran:{ x: 1, y: 2},
       next: { x: 0, y: 0}
     };
   }
@@ -79,6 +80,13 @@ function wordList(coords) {
       "basra": { x: 1, y: 1},
       "tikrit": { x: 1, y: 1},
       "finish": { x: 0, y: 0}
+    };
+  }
+  if(coords.x === 1 && coords.y === 2){
+    wordMap = {
+      "capture": { x: 0, y: 0},
+      "catch": { x: 0, y: 0},
+      "do nothing": { x: 0, y: 0}
     };
   }
 
