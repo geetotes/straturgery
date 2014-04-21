@@ -31,15 +31,16 @@ function cleanInput(data) {
 
 function drawWelcome(){
   var options = {
-    border: 2,
-    border_style: '*',
+    border: 1,
+    border_style: 'ascii',
     padding: 1,
     margin: 1,
-    align: 'none'
+    align: 'center'
   };
   var box = new TextDecorator(options);
-  var welcome = "\x1B[2J\x1B[31m";
-  welcome += box.draw("Welcome");
+  var welcome = "\x1B[2J\x1B[31m\x1B[40m";
+  welcome += box.draw("Welcome to");
+  welcome += "\x1B[31m\x1B[40m";
   welcome += ui.drawBreak(80, "-");
   welcome += ui.centerText(80, " ", "Welcome to");
   welcome += ui.centerText(80, " ", "STRATURGERY");
