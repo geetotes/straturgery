@@ -3,8 +3,8 @@ class TextDecorator
   startText: (text_decoration, background, foreground) ->
 
   constructor: (@options) ->
-    @background = @options.color ?= 0
-    @foreground = @options.color ?= 194
+    @background = @options.background ?= 0
+    @foreground = @options.foreground ?= 16
     @text_decoration = @options.text_decoration ?= 0
     @border = @options.border ?= 1
     @border_style= @options.border_style ?= "*"
@@ -12,7 +12,8 @@ class TextDecorator
     @margin = @options.margin ?= 0
     #@align = @options.align ?= "center"
 
-    @styleString = "\x1B[" + @text_decoration + "m\x1B[48;5;" + @background + "m\x1B[38;5;" + @foreground + "m\x1B[0m"
+    @styleString = "\x1B[" + @text_decoration + "m\x1B[48;5;" + @background + "m\x1B[38;5;" + @foreground + "m"
+    console.log(@options)
 
    
 
@@ -24,9 +25,9 @@ class TextDecorator
     
     borderLine = new Array(@text.length + 3).join(@border_style)
     @lines = []
-    @lines.push(borderLine)
+    @lines.push(@styleString + borderLine + "\x1B[0m")
     @lines.push(@border_style + @text + @border_style)
-    @lines.push(borderLine)
+    @lines.push(@styleString + borderLine + "\x1B[0m")
 
     @lines.join('\n')
 

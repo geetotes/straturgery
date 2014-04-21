@@ -31,9 +31,6 @@ function cleanInput(data) {
 
 function drawWelcome(){
   var options = {
-    background:'#000',
-    foreground:'#FFF',
-    text_decoration:'none',
     border: 1,
     border_style: '*',
     padding: 1,
@@ -42,8 +39,8 @@ function drawWelcome(){
   };
   var box = new TextDecorator(options);
   var welcome = "\x1B[2J\x1B[31m";
-  welcome += ui.drawBreak(80, "-");
   welcome += box.draw("Welcome");
+  welcome += ui.drawBreak(80, "-");
   welcome += ui.centerText(80, " ", "Welcome to");
   welcome += ui.centerText(80, " ", "STRATURGERY");
   welcome += ui.drawBreak(80, "-");
