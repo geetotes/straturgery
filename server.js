@@ -31,7 +31,7 @@ function cleanInput(data) {
 
 function drawWelcome(){
   var options = {
-    border: 1,
+    border: 2,
     border_style: '*',
     padding: 1,
     margin: 1,
