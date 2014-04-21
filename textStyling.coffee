@@ -1,8 +1,9 @@
 class TextDecorator
+  @pageWidth = 80
   constructor: (@options) ->
 #set some stuff
 #check options
-  style: (@text)->
+  draw: (@text)->
     @text
 
 module.exports = TextDecorator

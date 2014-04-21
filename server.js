@@ -9,7 +9,7 @@ var sockets = [];
 var gameState = require('./gameState');
 var ui = require('./ui');
 require('coffee-script/register');
-var decorator = require('./textStyling');
+var TextDecorator = require('./textStyling');
 
 
 //From SO: http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array/18650169#18650169
@@ -30,8 +30,20 @@ function cleanInput(data) {
 }
 
 function drawWelcome(){
+  var options = {
+    background:'#000',
+    foreground:'#FFF',
+    text_decoration:'none',
+    border: 1,
+    border_style: '*',
+    padding: 1,
+    margin: 1,
+    align: 'none'
+  };
+  var box = new TextDecorator(options);
   var welcome = "\x1B[2J\x1B[31m";
   welcome += ui.drawBreak(80, "-");
+  welcome += box.draw("Welcome");
   welcome += ui.centerText(80, " ", "Welcome to");
   welcome += ui.centerText(80, " ", "STRATURGERY");
   welcome += ui.drawBreak(80, "-");
