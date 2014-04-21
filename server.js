@@ -8,6 +8,8 @@ var sockets = [];
 
 var gameState = require('./gameState');
 var ui = require('./ui');
+require('coffee-script/register');
+var decorator = require('./textStyling');
 
 
 //From SO: http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array/18650169#18650169
@@ -241,6 +243,7 @@ function newSocket(socket) {
   var telnetOutput = new TelnetOutput();
   var NAWS = 31;
 
+  /*
   telnetInput.on('sub', function(option, buffer) {
     if(option === NAWS) {
       var width = buffer.readInt16BE(0);
@@ -256,7 +259,7 @@ function newSocket(socket) {
 
   //dont want any of the telnet input crap
   telnetOutput.writeDo(NAWS);
-
+*/
   socket.on('data', function(data) {
     recieveData(socket, data, turn);
     var coords = gameState.getCoords();
