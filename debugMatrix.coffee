@@ -10,6 +10,14 @@ class DebugMatrix
       if line.indexOf(key) > -1
         console.log("line: " + line + " matches index: " + key)
         return true
+
+  styleizeValues: (values) ->
+    console.log("values to be stylized: " + values)
+    values.replace(/"0"/g,"\x1B[38;5;82m\u25CB\x1B[0m")
+          .replace(/"1"/g,"\x1B[38;5;82m\u2B24\x1B[0m")
+          .replace(/"2"/g,"\x1B[38;5;202m\u2B24\x1B[0m")
+          .replace(/"3"/g,"\x1B[38;5;160m\u2B24\x1B[0m")
+          .replace(/"4"/g,"\x1B[38;5;160m\u25A0\x1B[0m")
     
 
 
@@ -56,7 +64,8 @@ class DebugMatrix
           else
             currentLine = "\u2502" + key + "\x1B[" + (longestTopicTitle - key.length) + "C\u2502"
           currentLine += key2 + "\x1B[" + (longestIndicatorTitle - key2.length) + "C\u2502"
-          currentLine += value2.join("\u2502")
+#we can make this better if we do unicode stuff last
+          currentLine += @styleizeValues(value2.join("\u2502"))
           lines.push(currentLine)
 
       #borderLine = new Array(@screenWidth).join("\u2500")
