@@ -20,6 +20,11 @@ class TextDecorator
     wrapper + text
   appendString: (text, wrapper) ->
     text + wrapper
+  offsetString: (text, offset) ->
+    "\x1B[" + offset + "C" + text
+  drawBreak: (cols, symbol) ->
+    new Array(cols).join(symbol) + "\n"
+
 
   draw: (@text) ->
     stringLength = @text.length
@@ -44,13 +49,9 @@ class TextDecorator
 
     if(@align == "center")
       @newLines = []
-      console.log(@screenWidth)
-      console.log(@text.length)
-      offsetLength = ((@screenWidth - @text.length)/2)
-      offsetLength = "\x1B[" + offsetLength + "C"
-
-      wrapper = new Array((@screenWidth - @text.length)/2).join(" ")
-      @newLines.push(@prependString(line, offsetLength)) for line in @lines
+      offset = Math.round((@screenWidth - @text.length)/2)
+      console.log("offset: " + offset)
+      @newLines.push(@offsetString(line, offset)) for line in @lines
       @lines = @newLines
 
     @lines.join('\n')

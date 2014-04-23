@@ -38,16 +38,13 @@ function drawWelcome(){
     align: 'center'
   };
   var box = new TextDecorator(options);
-  var welcome = "\x1B[2J\x1B[31m\x1B[40m";
-  welcome += box.draw("Welcome to");
-  welcome += "\x1B[31m\x1B[40m";
-  welcome += ui.drawBreak(80, "-");
-  welcome += ui.centerText(80, " ", "Welcome to");
-  welcome += ui.centerText(80, " ", "STRATURGERY");
-  welcome += ui.drawBreak(80, "-");
-  welcome += "\x1B[39m";
+  var welcome = "\x1B[2J";
+  welcome += box.draw("Welcome to") + "\n";
+  welcome += box.draw(" STRATURGERY ") + "\n";
   welcome += ui.drawIraqiFlag(30, 3);
-  welcome += ui.centerText(80, " ", "The Game of Pulling Out");
+  welcome += box.draw("The Game of Pulling Out") + "\n";
+  welcome += box.drawBreak(80, "-");
+  welcome += box.drawBreak(80, "-");
 
   return welcome;
 }
