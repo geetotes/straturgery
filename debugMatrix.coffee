@@ -7,10 +7,11 @@ class DebugMatrix
 
   checkLinesForKey: (lines, key) ->
     for line in lines
-      if line.indexOf key == 0
+      if line.indexOf(key) > -1
+        console.log("line: " + line + " matches index: " + key)
         return true
+    
 
-    return false
 
   draw: () ->
       lines = []
@@ -34,8 +35,6 @@ class DebugMatrix
       while (longestTopicTitle + longestIndicatorTitle + valueLength) < @screenWidth
         longestTopicTitle += 1
         longestIndicatorTitle += 1
-      console.log("longest topic: " + longestTopicTitle)
-      console.log("longest indicator: " + longestIndicatorTitle)
 
       topBorder1 = new Array(longestTopicTitle - 2).join("\u2500")
       topBorder1 = "\u250C" + topBorder1 + "\u252C"
