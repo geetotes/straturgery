@@ -226,13 +226,13 @@ function recieveData(socket, data, turn) {
   if (cleanData == "@quit") {
     socket.end('\x1B[44mGoodbye!\x1B[49m\n');
   }
+  else if (cleanData == "@debug"){
+    socket.write(drawDebugScreen());
+  }
   else {
     //should simply update coordinates
     if (cleanData == "next"){
       gameState.nextTurn();
-    }
-    if (cleanData == "debug"){
-      drawDebugScreen();
     }
     gameState.move(cleanData);
 

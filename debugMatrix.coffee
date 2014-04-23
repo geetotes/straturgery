@@ -2,7 +2,18 @@ class DebugMatrix
   constructor: (@options) ->
     @screenWidth = 80
 
+  wrapString: (text, wrapper) ->
+    wrapper + text + wrapper
+
+  checkLinesForKey: (lines, key) ->
+    for line in lines
+      if line.indexOf key == 0
+        return true
+
+    return false
+
   draw: () ->
+      lines = []
       headers = ["Topic", "Indicators", "Value"]
       matrixObject = {
         "Occupation Capacity": {
@@ -10,22 +21,50 @@ class DebugMatrix
           "Ability to Deliver Goods/Services": [3,2,1,3,2,1,1,3]
         }
       }
-#determine width of topic header
+      #determine width of topic header
       longestTopicTitle = 0
       longestIndicatorTitle = 0
       for key, value of matrixObject
         if key.length > longestTopicTitle then longestTopicTitle = key.length
         for key2, value2 of value
           if key2.length > longestIndicatorTitle then longestIndicatorTitle = key2.length
-      console.log(matrixObject)
+
+
+      valueLength = 16
+      while (longestTopicTitle + longestIndicatorTitle + valueLength) < @screenWidth
+        longestTopicTitle += 1
+        longestIndicatorTitle += 1
       console.log("longest topic: " + longestTopicTitle)
       console.log("longest indicator: " + longestIndicatorTitle)
 
+      topBorder1 = new Array(longestTopicTitle - 2).join("\u2500")
+      topBorder1 = "\u250C" + topBorder1 + "\u252C"
 
+      topBorder2 = new Array(longestIndicatorTitle - 1).join("\u2500")
+      topBorder2 = topBorder2 + "\u252C"
 
-      borderLine = new Array(@screenWidth).join("\u2500")
-      borderLineTop = "\u250C" + borderLine + "\u2510"
-      borderLineBottom = "\u2514" + borderLine + "\u2518"
+      topBorder3 = new Array(valueLength - 1).join("\u2500")
+      topBorder3 = topBorder3 + "\u2510"
+
+      borderLineTop = topBorder1 + topBorder2 + topBorder3
+      lines.push(borderLineTop)
+
+      for key, value of matrixObject
+        for key2, value2 of value
+          currentLine = ""
+          if @checkLinesForKey(lines, key)
+            currentLine = @wrapString(new Array(longestTopicTitle).join(" "), "\u2502")
+          else
+            currentLine = "\u2502" + key + "\x1B[" + (longestTopicTitle - key.length) + "C\u2502"
+          currentLine += key2 + "\x1B[" + (longestIndicatorTitle - key2.length) + "C\u2502"
+          currentLine += value2.join("\u2502")
+          lines.push(currentLine)
+
+      #borderLine = new Array(@screenWidth).join("\u2500")
+      #borderLineTop = "\u250C" + borderLine + "\u2510"
+      #borderLineBottom = "\u2514" + borderLine + "\u2518"
+
+      lines.join("\n")
 
 
 module.exports = new DebugMatrix
