@@ -12,8 +12,6 @@ class TextDecorator
 
     @styleString = "\x1B[" + @text_decoration + "m\x1B[48;5;" + @background + "m\x1B[38;5;" + @foreground + "m"
     console.log(@options)
-
-   
   wrapString: (text, wrapper) ->
     wrapper + text + wrapper
   prependString: (text, wrapper) ->
@@ -24,18 +22,30 @@ class TextDecorator
     "\x1B[" + offset + "C" + text
   drawBreak: (cols, symbol) ->
     new Array(cols).join(symbol) + "\n"
-
-
   draw: (@text) ->
     stringLength = @text.length
     @lines = []
-
+    #need to refactor this
     if(@border_style == "ascii")
       borderLine = new Array(@text.length + 1).join("\u2500")
       borderLineTop = "\u250C" + borderLine + "\u2510"
       borderLineBottom = "\u2514" + borderLine + "\u2518"
-      textMiddle = "\u2502" + @text + "\u2502"
-      @lines.push(borderLineTop, textMiddle, borderLineBottom)
+      textMiddle = @wrapString(@text, "\u2502")
+      @lines.push(borderLineTop)
+      if(@padding > 0)
+        spacer = new Array(@text.length + @padding).join(" ")
+        for i in [1..@padding]
+          @lines.push(@wrapString(spacer, "\u2502"))
+
+        @lines.push(@wrapString(@text, "\u2502"))
+
+        for i in [1..@padding]
+          @lines.push(@wrapString(spacer, "\u2502"))
+
+        @lines.push(borderLineBottom)
+
+      else
+        @lines.push(textMiddle, borderLineBottom)
     else
       borderLine = new Array(@text.length + 3).join(@border_style)
       if(@border != 0)
@@ -57,4 +67,5 @@ class TextDecorator
     @lines.join('\n')
 
 module.exports = TextDecorator
+
 

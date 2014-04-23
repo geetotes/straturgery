@@ -10,6 +10,7 @@ var gameState = require('./gameState');
 var ui = require('./ui');
 require('coffee-script/register');
 var TextDecorator = require('./textStyling');
+var DebugMatrix = require('./debugMatrix');
 
 
 //From SO: http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array/18650169#18650169
@@ -33,20 +34,37 @@ function drawWelcome(){
   var options = {
     border: 1,
     border_style: 'ascii',
+    padding: 0,
+    margin: 1,
+    align: 'center'
+  };
+  var titleOptions = {
+    border: 1,
+    border_style: 'ascii',
     padding: 1,
     margin: 1,
     align: 'center'
   };
+
   var box = new TextDecorator(options);
+  var titleBox = new TextDecorator(titleOptions);
   var welcome = "\x1B[2J";
   welcome += box.draw("Welcome to") + "\n";
-  welcome += box.draw(" STRATURGERY ") + "\n";
+  welcome += titleBox.draw(" STRATURGERY ") + "\n";
   welcome += ui.drawIraqiFlag(30, 3);
   welcome += box.draw("The Game of Pulling Out") + "\n";
   welcome += box.drawBreak(80, "-");
   welcome += box.drawBreak(80, "-");
 
   return welcome;
+}
+
+
+function drawDebugScreen(){
+  //var debugMatrix = new DebugMatrix();
+  var room = "\x1B[2J";
+  room += DebugMatrix.draw();
+  return room;
 }
 
 
@@ -212,6 +230,9 @@ function recieveData(socket, data, turn) {
     //should simply update coordinates
     if (cleanData == "next"){
       gameState.nextTurn();
+    }
+    if (cleanData == "debug"){
+      drawDebugScreen();
     }
     gameState.move(cleanData);
 
