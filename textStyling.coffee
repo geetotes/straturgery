@@ -16,6 +16,10 @@ class TextDecorator
    
   wrapString: (text, wrapper) ->
     wrapper + text + wrapper
+  prependString: (text, wrapper) ->
+    wrapper + text
+  appendString: (text, wrapper) ->
+    text + wrapper
 
   draw: (@text) ->
     stringLength = @text.length
@@ -42,8 +46,11 @@ class TextDecorator
       @newLines = []
       console.log(@screenWidth)
       console.log(@text.length)
+      offsetLength = ((@screenWidth - @text.length)/2)
+      offsetLength = "\x1B[" + offsetLength + "C"
+
       wrapper = new Array((@screenWidth - @text.length)/2).join(" ")
-      @newLines.push(@wrapString(line, wrapper)) for line in @lines
+      @newLines.push(@prependString(line, offsetLength)) for line in @lines
       @lines = @newLines
 
     @lines.join('\n')
